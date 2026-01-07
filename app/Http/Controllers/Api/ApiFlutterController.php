@@ -175,36 +175,50 @@ public function getDestinasiWisatawan()
         ], 200);
     }
 
-    public function pesanTiket(Request $request)
-    {
-        $request->validate([
-            'id_wisatawan' => 'required',
-            'id_tiket' => 'required',
-            'jumlah_tiket' => 'required|integer|min:1',
-        ]);
-
-        // Simulasikan pembuatan transaksi sederhana
-        $tiket = TiketTempatWisata::find($request->id_tiket);
-        
-        // Logika simpan transaksi (Contoh Sederhana)
-        $totalHarga = $tiket->harga * $request->jumlah_tiket;
-        
-        // Disini Anda bisa melakukan DB::table('transaksi')->insert(...) 
-        // Dan menyambungkannya ke tabel pembayaran
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Pesanan tiket berhasil disimpan'
-        ], 201);
-    }
-
     public function getBookmarks($id_wisatawan) {
         $bookmarks = Bookmark::where('id_wisatawan', $id_wisatawan)
             ->with('tempatWisata')
-            ->get()
-            ->pluck('tempatWisata'); // Ambil data tempat wisatanya saja
+            ->get();
 
-        return response()->json(['success' => true, 'data' => $bookmarks]);
+        return response()->json([
+            'success' => true, 
+            'data' => $bookmarks->map(function($b) {
+                $item = $b->tempatWisata;
+                return [
+                    'id_wisata' => $item->id_wisata,
+                    'nama_wisata' => $item->nama_wisata,
+                    'kota' => $item->kota,
+                    'average_rating' => 4.8,
+                    'total_reviews' => 120,
+                    'harga_tiket' => 50000,
+                    'foto_utama' => 'https://picsum.photos/400/300', 
+                    'deskripsi' => $item->deskripsi,
+                ];
+            })
+        ]);
+    }
+
+    public function getUserTickets($id_wisatawan) {
+        $tickets = Transaksi::where('id_wisatawan', $id_wisatawan)
+            ->with('tempatWisata')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $tickets->map(function($t) {
+                $item = $t->tempatWisata;
+                return [
+                    'id_wisata' => $item->id_wisata,
+                    'nama_wisata' => $item->nama_wisata,
+                    'kota' => $item->kota,
+                    'average_rating' => 4.8,
+                    'total_reviews' => 120,
+                    'harga_tiket' => 50000,
+                    'foto_utama' => 'https://picsum.photos/400/300', 
+                    'deskripsi' => $item->deskripsi,
+                ];
+            })
+        ]);
     }
 
     // Fitur Pencarian
@@ -272,5 +286,29 @@ public function getDestinasiWisatawan()
             ];
         });
         return response()->json(['success' => true, 'data' => $properties]);
+    }
+
+    public function toggleBookmark(Request $request) {
+        // Logika: Jika sudah ada maka hapus, jika belum ada maka buat baru
+        $exists = Bookmark::where('id_wisatawan', $request->id_wisatawan)
+                        ->where('id_wisata', $request->id_wisata)
+                        ->first();
+        if ($exists) {
+            $exists->delete();
+            return response()->json(['message' => 'Dihapus']);
+        }
+        Bookmark::create($request->all());
+        return response()->json(['message' => 'Disimpan']);
+    }
+
+    public function pesanTiket(Request $request) {
+        // Pastikan field sesuai dengan tabel transaksi/tiket Anda
+        Transaksi::create([
+            'id_wisatawan' => $request->id_wisatawan,
+            'id_wisata' => $request->id_wisata,
+            'jumlah_tiket' => $request->jumlah_tiket,
+            'status_pembayaran' => 'lunas' // Simulasi langsung lunas
+        ]);
+        return response()->json(['success' => true], 201);
     }
 }

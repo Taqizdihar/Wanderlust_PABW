@@ -8,7 +8,6 @@ Route::prefix('flutter')->group(function () {
 
     Route::post('/login', [ApiFlutterController::class, 'login']);
     
-    // 1. Ambil Statistik Dashboard (Ganti {id} dengan ID PTW yang ada di DB Anda)
     Route::get('/stats/{id}', [ApiFlutterController::class, 'getStats']);
     Route::get('/properties/{id}', [ApiFlutterController::class, 'getProperties']);
     Route::get('/profile/{id}', [ApiFlutterController::class, 'getProfile']);
@@ -16,7 +15,12 @@ Route::prefix('flutter')->group(function () {
     Route::get('/wisatawan/destinasi', [ApiFlutterController::class, 'getDestinasiWisatawan']);
     Route::get('/wisatawan/search', [ApiFlutterController::class, 'search']);
     Route::get('/wisatawan/bookmarks/{id}', [ApiFlutterController::class, 'getBookmarks']);
-    Route::get('/wisatawan/tickets/{id}', [ApiFlutterController::class, 'getUserTickets']);
+    // PERBAIKAN: Pastikan nama method sesuai
+    Route::get('/wisatawan/tickets/{id}', [ApiFlutterController::class, 'getUserTickets']); 
+    
+    // PERBAIKAN: Hapus '/flutter' di awal string rute
+    Route::post('/wisatawan/bookmarks/toggle', [ApiFlutterController::class, 'toggleBookmark']);
+    Route::post('/wisatawan/pesan-tiket', [ApiFlutterController::class, 'pesanTiket']);
 
     Route::get('/admin/members', [ApiFlutterController::class, 'getAdminMembers']);
     Route::get('/admin/owners', [ApiFlutterController::class, 'getAdminOwners']);
