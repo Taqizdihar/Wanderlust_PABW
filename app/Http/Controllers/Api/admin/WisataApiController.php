@@ -32,30 +32,9 @@ class WisataApiController extends Controller {
             'data'    => $wisata
         ], 201);
     }
-
-    // 3. SETUJUI WISATA (APPROVE)
-    public function approve($id) {
-        $wisata = Wisata::find($id);
-
-        if (!$wisata) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Data wisata tidak ditemukan'
-            ], 404);
-        }
-
-        $wisata->status = 'approved';
-        $wisata->save();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Wisata berhasil disetujui!',
-            'data'    => $wisata
-        ], 200);
-    }
-// Tambahan fungsi baru khusus untuk ganti status pakai angka (0 atau 1)
-    public function updateStatus(Request $request, $id) {
-        // Kita pakai where('id_tempat') biar pasti ketemu kayak di fungsi update kamu
+// 3. SETUJUI / GANTI STATUS WISATA (Fleksibel)
+    public function approve(Request $request, $id) {
+        // Kita pakai where('id_tempat') biar sinkron sama primary key kamu beb
         $wisata = Wisata::where('id_tempat', $id)->first();
 
         if (!$wisata) {
@@ -65,14 +44,36 @@ class WisataApiController extends Controller {
             ], 404);
         }
 
-        // Update statusnya pakai data yang dikirim dari Postman
+        // Kuncinya di sini: Kalau kamu isi 'status' di Postman, dia bakal ikutin itu.
+        // Tapi kalau 'status' dikosongin, dia otomatis jadi 'approved'. Pintar kan?
+        $wisata->status = $request->status ?? 'approved';
+        $wisata->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status wisata berhasil diperbarui jadi ' . $wisata->status,
+            'data'    => $wisata
+        ], 200);
+    }
+// Fungsi ganti status pakai kata-kata (aktif/nonaktif)
+    public function updateStatus(Request $request, $id) {
+        $wisata = Wisata::where('id_tempat', $id)->first();
+
+        if (!$wisata) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data wisata tidak ditemukan'
+            ], 404);
+        }
+
+        // Ini kuncinya beb, dia bakal ambil tulisan apa pun yang kamu ketik di Postman
         $wisata->update([
             'status' => $request->status 
         ]);
 
         return response()->json([
             'success' => true,
-            'message' => 'Status tempat wisata berhasil diupdate!',
+            'message' => 'Status berhasil diubah menjadi ' . $request->status,
             'data'    => $wisata
         ], 200);
     }
