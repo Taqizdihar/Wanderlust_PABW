@@ -35,8 +35,6 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 //admin
-
-
 // --- ROUTE UNTUK WISATAWAN ---
 Route::get('users', [WisatawanApiController::class, 'index']);
 Route::post('users', [WisatawanApiController::class, 'store']);
@@ -50,3 +48,4 @@ Route::post('wisata', [WisataApiController::class, 'store']);
 Route::put('wisata/{id}', [WisataApiController::class, 'update']); // <--- JALAN UNTUK EDIT (BIAR GAK ERROR PUT)
 Route::patch('wisata/{id}/approve', [WisataApiController::class, 'approve']);
 Route::delete('wisata/{id}', [WisataApiController::class, 'destroy']);
+Route::put('wisata/{id}', [WisataApiController::class, 'update']);

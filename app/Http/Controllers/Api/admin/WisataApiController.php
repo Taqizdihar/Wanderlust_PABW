@@ -64,28 +64,28 @@ class WisataApiController extends Controller {
     }
 
     // 5. EDIT WISATA (Ini yang baru ya beb!)
-    public function update(Request $request, $id) {
-        $wisata = Wisata::find($id);
+// Tambahkan ini di dalam class WisataApiController
+public function update(Request $request, $id) {
+    // Cari data berdasarkan primary key id_tempat
+    $wisata = Wisata::find($id);
 
-        if (!$wisata) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Data wisata tidak ditemukan'
-            ], 404);
-        }
-
-        // Pakai update biar simple
-        $wisata->update([
-            'nama_tempat'   => $request->nama_tempat ?? $wisata->nama_tempat,
-            'alamat_tempat' => $request->alamat_tempat ?? $wisata->alamat_tempat,
-            'deskripsi'     => $request->deskripsi ?? $wisata->deskripsi,
-            'status'        => $request->status ?? $wisata->status,
-        ]);
-
+    if (!$wisata) {
         return response()->json([
-            'success' => true,
-            'message' => 'Data wisata berhasil diupdate!',
-            'data'    => $wisata
-        ], 200);
+            'success' => false,
+            'message' => 'Data wisata tidak ditemukan'
+        ], 404);
     }
+
+    $wisata->update([
+        'nama_tempat'   => $request->nama_tempat ?? $wisata->nama_tempat,
+        'alamat_tempat' => $request->alamat_tempat ?? $wisata->alamat_tempat,
+        'deskripsi'     => $request->deskripsi ?? $wisata->deskripsi,
+    ]);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Data Wisata berhasil diupdate!',
+        'data'    => $wisata
+    ], 200);
+}
 }
