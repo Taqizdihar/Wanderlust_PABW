@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class TempatWisata extends Model {
     use HasFactory;
 
-    protected $table = 'tempat_wisata';
+    protected $table = 'tempat_wisatas';
 
-    protected $primaryKey = 'id_wisata';
+    protected $primaryKey = 'id_wisata'; 
 
     protected $fillable = [
         'id_ptw',
@@ -33,8 +33,8 @@ class TempatWisata extends Model {
         return $this->hasMany(TiketTempatWisata::class, 'id_wisata');
     }
 
-    public function fotoTempatWisata() {
-        return $this->hasMany(FotoTempatWisata::class, 'id_wisata');
+    public function fotoTempatWisatas() {
+        return $this->hasMany(FotoTempatWisata::class, 'id_tempat', 'id_tempat');
     }
 
     public function penilaian() {
