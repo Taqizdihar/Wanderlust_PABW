@@ -1,30 +1,26 @@
 <?php
 
-use App\Http\Controllers\Api\ApiFlutterController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\AuthApiController;
+use App\Http\Controllers\Api\Ptw\managePropertiesController;
 
-// Rute untuk Flutter (Tanpa Middleware Auth dahulu agar mudah dites dengan Postman)
-Route::prefix('flutter')->group(function () {
+Route::post('/register', [AuthApiController::class, 'register']);
+Route::post('/login', [AuthApiController::class, 'login']);
 
-    Route::post('/login', [ApiFlutterController::class, 'login']);
-    
-    Route::get('/stats/{id}', [ApiFlutterController::class, 'getStats']);
-    Route::get('/properties/{id}', [ApiFlutterController::class, 'getProperties']);
-    Route::get('/profile/{id}', [ApiFlutterController::class, 'getProfile']);
-    
-    Route::get('/wisatawan/destinasi', [ApiFlutterController::class, 'getDestinasiWisatawan']);
-    Route::get('/wisatawan/search', [ApiFlutterController::class, 'search']);
-    Route::get('/wisatawan/bookmarks/{id}', [ApiFlutterController::class, 'getBookmarks']);
-    // PERBAIKAN: Pastikan nama method sesuai
-    Route::get('/wisatawan/tickets/{id}', [ApiFlutterController::class, 'getUserTickets']); 
-    
-    // PERBAIKAN: Hapus '/flutter' di awal string rute
-    Route::post('/wisatawan/bookmarks/toggle', [ApiFlutterController::class, 'toggleBookmark']);
-    Route::post('/wisatawan/pesan-tiket', [ApiFlutterController::class, 'pesanTiket']);
-
-    Route::get('/admin/members', [ApiFlutterController::class, 'getAdminMembers']);
-    Route::get('/admin/owners', [ApiFlutterController::class, 'getAdminOwners']);
-    Route::get('/admin/properties', [ApiFlutterController::class, 'getAdminProperties']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthApiController::class, 'logout']);
+    Route::get('/properties', [managePropertiesController::class, 'index']);
+    Route::post('/properties', [managePropertiesController::class, 'store']);
+    Route::get('/properties/{id}', [managePropertiesController::class, 'show']);
+    Route::put('/properties/{id}', [managePropertiesController::class, 'update']);
+    Route::delete('/properties/{id}', [managePropertiesController::class, 'destroy']);
+    Route::get('/properties/{id_wisata}/tickets', [manageTicketsController::class, 'index']);
+    Route::post('/properties/{id_wisata}/tickets', [manageTicketsController::class, 'store']);
+    Route::get('/tickets/{id_tiket}', [manageTicketsController::class, 'show']);
+    Route::put('/tickets/{id_tiket}', [manageTicketsController::class, 'update']);
+    Route::delete('/tickets/{id_tiket}', [manageTicketsController::class, 'destroy']);
+    Route::get('/profile', [profilPTWController::class, 'show']);
+    Route::put('/profile/update', [profilPTWController::class, 'update']);
 });
 
 // admin
