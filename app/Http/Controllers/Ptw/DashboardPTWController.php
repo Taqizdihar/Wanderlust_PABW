@@ -10,7 +10,7 @@ use App\Models\Transaksi;
 
 class DashboardPTWController extends Controller {
     public function index() {
-        $user = Auth::user(); //kk
+        $user = Auth::user();
 
         $ptw = $user->pemilikTempatWisata;
 
