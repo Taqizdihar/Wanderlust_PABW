@@ -49,3 +49,5 @@ Route::put('wisata/{id}', [WisataApiController::class, 'update']); // <--- JALAN
 Route::patch('wisata/{id}/approve', [WisataApiController::class, 'approve']);
 Route::delete('wisata/{id}', [WisataApiController::class, 'destroy']);
 Route::put('wisata/{id}', [WisataApiController::class, 'update']);
+// Pastikan ada baris ini beb:
+Route::put('wisata/{id}', [WisataApiController::class, 'update']); // <--- INI WAJIB ADA
