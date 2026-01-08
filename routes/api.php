@@ -26,3 +26,17 @@ Route::prefix('flutter')->group(function () {
     Route::get('/admin/owners', [ApiFlutterController::class, 'getAdminOwners']);
     Route::get('/admin/properties', [ApiFlutterController::class, 'getAdminProperties']);
 });
+
+// admin
+use App\Http\Controllers\Api\WisatawanApiController;
+use App\Http\Controllers\Api\WisataApiController;
+
+// Route untuk Wisatawan
+Route::get('/users', [WisatawanApiController::class, 'index']);
+Route::post('/users', [WisatawanApiController::class, 'store']);
+Route::patch('/users/{id}/status', [WisatawanApiController::class, 'updateStatus']);
+
+// Route untuk Wisata
+Route::get('/wisata', [WisataApiController::class, 'index']);
+Route::post('/wisata', [WisataApiController::class, 'store']);
+Route::patch('/wisata/{id}/approve', [WisataApiController::class, 'approve']);
