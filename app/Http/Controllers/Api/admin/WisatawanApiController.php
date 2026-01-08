@@ -9,28 +9,16 @@ use Illuminate\Support\Facades\Hash;
 
 class WisatawanApiController extends Controller 
 {
-    // 1. LIHAT SEMUA USER (GET /api/users)
+    // 1. LIHAT SEMUA USER
     public function index() {
-        $users = Wisatawan::all();
         return response()->json([
             'success' => true,
-            'message' => 'Daftar semua wisatawan berhasil diambil',
-            'data'    => $users
+            'data'    => Wisatawan::all()
         ], 200);
     }
 
-    // 2. LIHAT DETAIL 1 USER (GET /api/users/{id})
-    public function show($id) {
-        $user = Wisatawan::find($id);
-        if (!$user) {
-            return response()->json(['message' => 'User tidak ditemukan'], 404);
-        }
-        return response()->json($user, 200);
-    }
-
-    // 3. TAMBAH USER BARU (POST /api/users)
+    // 2. TAMBAH USER BARU
     public function store(Request $request) {
-        // Validasi simpel biar gak error kalau datanya kosong
         $request->validate([
             'nama'     => 'required',
             'email'    => 'required|email|unique:wisatawan,email',
@@ -41,52 +29,49 @@ class WisatawanApiController extends Controller
         $user = Wisatawan::create([
             'nama'     => $request->nama,
             'email'    => $request->email,
-            'password' => Hash::make($request->password), // Lebih aman pakai Hash
+            'password' => Hash::make($request->password),
             'no_hp'    => $request->no_hp,
             'status'   => 'AKTIF' 
         ]);
 
+        return response()->json(['success' => true, 'message' => 'User Berhasil Ditambah', 'data' => $user], 201);
+    }
+
+    // 3. EDIT DATA USER
+    public function update(Request $request, $id) {
+        $user = Wisatawan::where('id_wisatawan', $id)->first();
+        if (!$user) return response()->json(['message' => 'User tidak ditemukan'], 404);
+
+        $user->update([
+            'nama'     => $request->nama ?? $user->nama,
+            'email'    => $request->email ?? $user->email,
+            'no_hp'    => $request->no_hp ?? $user->no_hp,
+            'password' => $request->password ? Hash::make($request->password) : $user->password,
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Data berhasil diupdate!', 'data' => $user], 200);
+    }
+
+    // 4. KHUSUS UPDATE STATUS
+    public function updateStatus(Request $request, $id) {
+        $user = Wisatawan::where('id_wisatawan', $id)->first();
+        if (!$user) return response()->json(['message' => 'User tidak ditemukan'], 404);
+
+        $user->update(['status' => $request->status]);
+        
         return response()->json([
-            'success' => true,
-            'message' => 'User Berhasil Ditambah',
-            'data'    => $user
-        ], 201);
+            'success' => true, 
+            'message' => 'Status berhasil diubah!', 
+            'data' => $user
+        ], 200);
     }
 
-    // 6. EDIT / UPDATE WISATAWAN (PUT /api/users/{id})
-public function update(Request $request, $id) {
-    $user = Wisatawan::find($id);
-
-    if (!$user) {
-        return response()->json(['message' => 'User tidak ditemukan'], 404);
-    }
-
-    $user->update([
-        'nama'     => $request->nama ?? $user->nama,
-        'email'    => $request->email ?? $user->email,
-        'no_hp'    => $request->no_hp ?? $user->no_hp,
-        // Password diupdate hanya jika diisi di Postman
-        'password' => $request->password ? bcrypt($request->password) : $user->password,
-    ]);
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Data Wisatawan berhasil diupdate!',
-        'data'    => $user
-    ], 200);
-}
-
-    // 5. HAPUS USER (DELETE /api/users/{id})
+    // 5. HAPUS USER
     public function destroy($id) {
-        $user = Wisatawan::find($id);
-        if (!$user) {
-            return response()->json(['message' => 'User tidak ditemukan'], 404);
-        }
+        $user = Wisatawan::where('id_wisatawan', $id)->first();
+        if (!$user) return response()->json(['message' => 'User tidak ditemukan'], 404);
         
         $user->delete();
-        return response()->json([
-            'success' => true,
-            'message' => 'User Berhasil Dihapus'
-        ], 200);
+        return response()->json(['success' => true, 'message' => 'User Berhasil Dihapus'], 200);
     }
 }

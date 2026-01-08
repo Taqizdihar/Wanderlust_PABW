@@ -53,7 +53,29 @@ class WisataApiController extends Controller {
             'data'    => $wisata
         ], 200);
     }
+// Tambahan fungsi baru khusus untuk ganti status pakai angka (0 atau 1)
+    public function updateStatus(Request $request, $id) {
+        // Kita pakai where('id_tempat') biar pasti ketemu kayak di fungsi update kamu
+        $wisata = Wisata::where('id_tempat', $id)->first();
 
+        if (!$wisata) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data wisata tidak ditemukan'
+            ], 404);
+        }
+
+        // Update statusnya pakai data yang dikirim dari Postman
+        $wisata->update([
+            'status' => $request->status 
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status tempat wisata berhasil diupdate!',
+            'data'    => $wisata
+        ], 200);
+    }
     // 4. HAPUS WISATA
     public function destroy($id) {
         $wisata = Wisata::find($id);
