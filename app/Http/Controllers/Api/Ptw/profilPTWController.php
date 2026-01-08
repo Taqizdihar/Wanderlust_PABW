@@ -8,14 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class profilPTWController extends Controller
-{
-    /**
-     * Menampilkan data profil PTW yang sedang login.
-     */
-    public function show()
-    {
-        // Mengambil user beserta data relasi pemiliknya
+class profilPTWController extends Controller {
+
+    public function show() {
         $user = Auth::user()->load('pemilikTempatWisata');
 
         return response()->json([
@@ -25,43 +20,42 @@ class profilPTWController extends Controller
         ], 200);
     }
 
-    /**
-     * Mengupdate data profil PTW.
-     */
-    public function update(Request $request)
-    {
+    public function update(Request $request) {
         $user = Auth::user();
         $ptw = $user->pemilikTempatWisata;
 
         $validator = Validator::make($request->all(), [
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|min:6|confirmed',
-            // Field berikut diasumsikan ada di tabel pemilik_tempat_wisata
-            'no_telp'  => 'nullable|string',
-            'alamat'   => 'nullable|string',
+            'nama'            => 'required|string|max:255',
+            'email'           => 'required|email|unique:users,email,' . $user->id_user . ',id_user',
+            'nomor_telepon'   => 'nullable|string|max:15',
+            'password'        => 'nullable|min:6|confirmed',
+            'jabatan'         => 'nullable|string',
+            'nama_organisasi' => 'nullable|string',
+            'alamat_bisnis'   => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Validasi gagal',
                 'errors'  => $validator->errors()
             ], 422);
         }
 
-        // 1. Update data di tabel Users
-        $user->name = $request->name;
+        $user->nama = $request->nama;
         $user->email = $request->email;
+        $user->nomor_telepon = $request->nomor_telepon;
         
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
         }
         $user->save();
 
-        // 2. Update data di tabel Pemilik Tempat Wisata (jika ada)
         if ($ptw) {
-            $ptw->update($request->only(['no_telp', 'alamat']));
+            $ptw->update($request->only([
+                'jabatan', 
+                'nama_organisasi', 
+                'alamat_bisnis'
+            ])); //
         }
 
         return response()->json([

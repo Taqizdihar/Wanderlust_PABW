@@ -8,15 +8,11 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\TempatWisata;
 use Illuminate\Support\Facades\Validator;
 
-class managePropertiesController extends Controller
-{
-    /**
-     * 1. Menampilkan semua tempat wisata milik PTW yang sedang login.
-     */
-    public function index()
-    {
+class managePropertiesController extends Controller {
+
+    public function index() {
         $user = Auth::user();
-        $ptw = $user->pemilikTempatWisata; // Mengambil relasi PTW dari user
+        $ptw = $user->pemilikTempatWisata;
 
         $properties = TempatWisata::where('id_ptw', $ptw->id_ptw)->get();
 
@@ -27,11 +23,7 @@ class managePropertiesController extends Controller
         ], 200);
     }
 
-    /**
-     * 2. Menambahkan tempat wisata baru.
-     */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $user = Auth::user();
         $ptw = $user->pemilikTempatWisata;
 
@@ -61,8 +53,8 @@ class managePropertiesController extends Controller
             'waktu_buka' => $request->waktu_buka,
             'waktu_tutup' => $request->waktu_tutup,
             'deskripsi' => $request->deskripsi,
-            'status_wisata' => 'pending', // Default sesuai permintaan
-            'catatan_revisi' => null,     // Default sesuai permintaan
+            'status_wisata' => 'pending',
+            'catatan_revisi' => null,
         ]);
 
         return response()->json([
@@ -72,11 +64,7 @@ class managePropertiesController extends Controller
         ], 201);
     }
 
-    /**
-     * 3. Melihat detail satu tempat wisata tertentu.
-     */
-    public function show($id)
-    {
+    public function show($id) {
         $user = Auth::user();
         $ptw = $user->pemilikTempatWisata;
 
@@ -91,11 +79,7 @@ class managePropertiesController extends Controller
         return response()->json(['success' => true, 'data' => $property], 200);
     }
 
-    /**
-     * 4. Mengubah data tempat wisata.
-     */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         $user = Auth::user();
         $ptw = $user->pemilikTempatWisata;
 
@@ -116,11 +100,7 @@ class managePropertiesController extends Controller
         ], 200);
     }
 
-    /**
-     * 5. Menghapus tempat wisata.
-     */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         $user = Auth::user();
         $ptw = $user->pemilikTempatWisata;
 
