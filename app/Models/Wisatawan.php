@@ -6,8 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Wisatawan extends Model
 {
-    protected $table = 'wisatawan'; // Sesuai phpMyAdmin kamu
-    protected $primaryKey = 'id_wisatawan'; // Sesuai phpMyAdmin kamu
+    // Nama tabel HARUS 'wisatawan' sesuai database kamu
+    protected $table = 'wisatawan'; 
+
+    // Primary Key-nya HARUS 'id_wisatawan'
+    protected $primaryKey = 'id_wisatawan'; 
 
     protected $fillable = [
         'nama', 
@@ -16,4 +19,7 @@ class Wisatawan extends Model
         'no_hp', 
         'status'
     ];
+
+    // Sembunyikan password biar aman pas di-get
+    protected $hidden = ['password'];
 }

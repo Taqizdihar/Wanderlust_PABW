@@ -32,9 +32,9 @@ class WisataApiController extends Controller {
             'data'    => $wisata
         ], 201);
     }
-// 3. SETUJUI / GANTI STATUS WISATA (Fleksibel)
+// 3. SETUJUI / GANTI STATUS WISATA (Sempurna & Fleksibel)
     public function approve(Request $request, $id) {
-        // Kita pakai where('id_tempat') biar sinkron sama primary key kamu beb
+        // Cari data menggunakan id_tempat sesuai database
         $wisata = Wisata::where('id_tempat', $id)->first();
 
         if (!$wisata) {
@@ -44,8 +44,7 @@ class WisataApiController extends Controller {
             ], 404);
         }
 
-        // Kuncinya di sini: Kalau kamu isi 'status' di Postman, dia bakal ikutin itu.
-        // Tapi kalau 'status' dikosongin, dia otomatis jadi 'approved'. Pintar kan?
+        // Ambil dari Postman, kalau kosong otomatis jadi 'approved'
         $wisata->status = $request->status ?? 'approved';
         $wisata->save();
 

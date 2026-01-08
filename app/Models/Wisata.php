@@ -8,7 +8,7 @@ class Wisata extends Model {
     // Paksa Laravel menggunakan nama tabel yang ada di database kamu
     protected $table = 'tempat_wisatas'; 
     
-    protected $primaryKey = 'id_tempat'; // Pastikan PK ini sesuai dengan kolom di tabel kamu
+    protected $primaryKey = 'id_tempat'; // Sesuaikan dengan PK di database kamu
 
     protected $fillable = [
         'nama_tempat', 
