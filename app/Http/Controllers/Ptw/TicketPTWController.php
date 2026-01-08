@@ -15,13 +15,14 @@ class TicketPTWController extends Controller {
         $ptw = $user->pemilikTempatWisata;
 
         $property = TempatWisata::where('id_wisata', $id)->where('id_ptw', $ptw->id_ptw)->firstOrFail();
-		$tickets = $property->tiketTempatWisata;
-        $query = TiketTempatWisata::where('id_wisata', $id);
-		
-		if ($request->has('search') && $request->search != '') {
+		$query = $property->tiketTempatWisata(); 
+
+        if ($request->has('search') && $request->search != '') {
             $search = $request->search;
             $query->where('nama_tiket', 'like', "%{$search}%");
         }
+
+        $tickets = $query->get();
 
         return view('ptw.tickets.index', compact('user', 'ptw', 'property', 'tickets'));
     }
