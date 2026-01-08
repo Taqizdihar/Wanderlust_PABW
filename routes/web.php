@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController; //untuk autentikasi
 use App\Http\Controllers\Admin\DashboardController; //untuk administrator
