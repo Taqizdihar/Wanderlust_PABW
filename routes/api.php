@@ -2,16 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthApiController;
+
 use App\Http\Controllers\Api\Admin\WisatawanApiController;
 use App\Http\Controllers\Api\Admin\WisataApiController;
 use App\Http\Controllers\Api\Admin\ProfileApiController;
+
 use App\Http\Controllers\Api\Ptw\managePropertiesController;
 use App\Http\Controllers\Api\Ptw\manageTicketsController;
 use App\Http\Controllers\Api\Ptw\profilPTWController;
 
 /*
 |--------------------------------------------------------------------------
-| 1. AUTHENTICATION (Public & Private)
+| 1. AUTHENTICATION (Register & Login)
 |--------------------------------------------------------------------------
 */
 Route::post('/register', [AuthApiController::class, 'register']);
@@ -23,7 +25,31 @@ Route::middleware('auth:sanctum')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| 2. ROLE: ADMIN (Butuh Token)
+| 2. ROLE: WISATAWAN 
+|--------------------------------------------------------------------------
+*/
+Route::prefix('user')->group(function () {
+    $ns = 'App\\Http\\Controllers\\Api\\Wisatawan';
+
+    // Rute Publik (Tanpa Token)
+    Route::get('/home', [$ns . '\\ApiWisatawanController', 'index']);
+    Route::get('/destinasi/{id}', [$ns . '\\ApiWisatawanController', 'detail']);
+
+    // Rute Private (Butuh Token/Login)
+    Route::middleware('auth:sanctum')->group(function () use ($ns) {
+        // Profil
+        Route::get('/profil', [$ns . '\\ApiWisatawanController', 'profile']); 
+        
+        // Fitur Utama
+        Route::post('/bookmark', [$ns . '\\ApiWisatawanController', 'storeBookmark']);
+        Route::post('/pesan-tiket', [$ns . '\\ApiWisatawanController', 'checkout']);
+        Route::post('/penilaian', [$ns . '\\ApiWisatawanController', 'beriUlasan']);
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
+| 3. ROLE: ADMIN
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
@@ -48,7 +74,7 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| 3. ROLE: PTW (Pemilik Tempat Wisata - Butuh Token)
+| 4. ROLE: PTW (Pemilik Tempat Wisata)
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth:sanctum')->prefix('ptw')->group(function () {
@@ -62,28 +88,4 @@ Route::middleware('auth:sanctum')->prefix('ptw')->group(function () {
     Route::post('/properties/{id_wisata}/tickets', [manageTicketsController::class, 'store']);
     
     Route::get('/profil', [profilPTWController::class, 'index']);
-});
-
-/*
-|--------------------------------------------------------------------------
-| 4. ROLE: WISATAWAN
-|--------------------------------------------------------------------------
-*/
-Route::prefix('user')->group(function () {
-    $ns = 'App\Http\Controllers\Wisatawan';
-
-    // Public (Tanpa Login)
-    Route::get('/home', [$ns . '\HomeController', 'index']);
-    Route::get('/destinasi', [$ns . '\DestinasiController', 'index']);
-    Route::get('/pencarian', [$ns . '\PencarianController', 'index']);
-
-    // Private (Harus Login)
-    Route::middleware('auth:sanctum')->group(function () use ($ns) {
-        Route::get('/profil', [$ns . '\ProfilController', 'index']);
-        Route::post('/profil/update', [$ns . '\editProfilController', 'update']);
-        Route::get('/bookmark', [$ns . '\BookmarkController', 'index']);
-        Route::post('/bookmark', [$ns . '\BookmarkController', 'store']);
-        Route::post('/pesan-tiket', [$ns . '\PesanTiketController', 'store']);
-        Route::post('/penilaian', [$ns . '\PenilaianController', 'store']);
-    });
 });

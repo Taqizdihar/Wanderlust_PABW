@@ -40,6 +40,16 @@ class ApiWisatawanController extends Controller
     // --- 2. FITUR WISATAWAN (BUTUH LOGIN) ---
 
     // Toggle Bookmark (Tambah/Hapus)
+
+    public function profile()
+{
+    $user = Auth::user()->load('wisatawan'); 
+    return response()->json([
+        'status' => 'success',
+        'data'   => $user
+    ], 200);
+}
+
     public function storeBookmark(Request $request)
     {
         $id_wisatawan = Auth::user()->wisatawan->id_wisatawan;
