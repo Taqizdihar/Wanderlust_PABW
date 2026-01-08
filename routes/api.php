@@ -97,7 +97,6 @@ Route::post('wisata', [WisataApiController::class, 'store']);
 Route::put('wisata/{id}', [WisataApiController::class, 'update']); 
 Route::patch('wisata/{id}/approve', [WisataApiController::class, 'approve']);
 Route::delete('wisata/{id}', [WisataApiController::class, 'destroy']);
-<<<<<<< HEAD
 
 // --- ROUTE UNTUK PROFILE USER ---
 Route::get('profile', [ProfileApiController::class, 'index']);      
@@ -108,5 +107,3 @@ Route::delete('profile/{id}', [ProfileApiController::class, 'destroy']);
 Route::put('wisata/{id}', [WisataApiController::class, 'update']);
 // Pastikan ada baris ini beb:
 Route::put('wisata/{id}', [WisataApiController::class, 'update']); // <--- INI WAJIB ADA
->>>>>>> c19b52e6393778b6a492ef66276fe2f624aa6c83
->>>>>>> 3b784bbbcde820ce35e1c125862e6663ce119610
