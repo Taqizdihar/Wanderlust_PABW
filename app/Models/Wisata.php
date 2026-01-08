@@ -5,8 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class Wisata extends Model {
-   protected $table = 'tempat_wisatas'; // Pastikan ada huruf 's' di belakangnya
-    protected $primaryKey = 'id_tempat'; // WAJIB ADA INI biar gak error find($id)
+    // Paksa Laravel menggunakan nama tabel yang ada di database kamu
+    protected $table = 'tempat_wisatas'; 
+    
+    protected $primaryKey = 'id_tempat'; // Pastikan PK ini sesuai dengan kolom di tabel kamu
 
     protected $fillable = [
         'nama_tempat', 

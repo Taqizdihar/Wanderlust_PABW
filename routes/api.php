@@ -39,6 +39,9 @@ Route::middleware('auth:sanctum')->group(function () {
 // JANGAN GANGGU!!!!!
 //admin
 // --- ROUTE UNTUK WISATAWAN ---
+
+
+// --- ROUTE UNTUK WISATAWAN ---
 Route::get('users', [WisatawanApiController::class, 'index']);
 Route::post('users', [WisatawanApiController::class, 'store']);
 Route::put('users/{id}', [WisatawanApiController::class, 'update']); 
@@ -51,10 +54,8 @@ Route::post('wisata', [WisataApiController::class, 'store']);
 Route::put('wisata/{id}', [WisataApiController::class, 'update']); 
 Route::patch('wisata/{id}/approve', [WisataApiController::class, 'approve']);
 Route::delete('wisata/{id}', [WisataApiController::class, 'destroy']);
-// Pastikan tidak ada typo di kata 'users'
-Route::post('users', [WisatawanApiController::class, 'store']);
 
-// --- ROUTE UNTUK PROFILE USER ---
+// --- ROUTE UNTUK PROFILE (Tabel Users) ---
 Route::get('profile', [ProfileApiController::class, 'index']);      
 Route::post('profile', [ProfileApiController::class, 'store']);    
 Route::put('profile/{id}', [ProfileApiController::class, 'update']); 
