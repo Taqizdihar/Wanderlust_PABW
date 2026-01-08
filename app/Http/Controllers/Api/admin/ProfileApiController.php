@@ -21,9 +21,8 @@ class ProfileApiController extends Controller {
         $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
-            'password' => bcrypt($request->password), // Password aman otomatis di-hash
-            'bio'      => $request->bio ?? '-',        // Kalau kosong diisi strip
-            'foto'     => $request->foto ?? 'default.png' // Default foto jika kosong
+            'password' => bcrypt($request->password),
+            'bio'      => $request->bio ?? '-', 
         ]);
 
         return response()->json([
@@ -44,12 +43,10 @@ class ProfileApiController extends Controller {
             ], 404);
         }
 
-        // Update data: Jika di Postman kosong, tetap pakai data lama
         $user->update([
             'name'     => $request->name ?? $user->name,
             'email'    => $request->email ?? $user->email,
             'bio'      => $request->bio ?? $user->bio,
-            'foto'     => $request->foto ?? $user->foto,
             'password' => $request->password ? bcrypt($request->password) : $user->password,
         ]);
 
