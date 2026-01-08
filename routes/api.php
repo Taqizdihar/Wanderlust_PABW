@@ -66,5 +66,3 @@ Route::patch('wisata/{id}/status', [WisataApiController::class, 'updateStatus'])
 // JANGAN GANNGU!!!!!!
 
 
-
-// wisatawan
