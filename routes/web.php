@@ -21,6 +21,9 @@ use App\Http\Controllers\Wisatawan\PencarianController;
 use App\Http\Controllers\Wisatawan\PenilaianController;
 use App\Http\Controllers\Wisatawan\PesanTiketController;
 use App\Http\Controllers\Wisatawan\ProfilController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WisataController;
 
 //untuk autentikasi - umum
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
@@ -55,12 +58,6 @@ Route::get('/homeWisatawan', function () {
 });
 Route::get('/pencarian', [PencarianController::class, 'index'])->name('pencarian');
 Route::get('/destinasi', [DestinasiController::class, 'index'])->name('destinasi.index'); 
-
-
-// ----------------------------------------------------
-// ROUTE WISATAWAN (MEMERLUKAN LOGIN / AUTHENTICATION)
-// ----------------------------------------------------
-// Asumsi Guard adalah 'wisatawan'
 Route::middleware(['auth:wisatawan'])->group(function () {
     
     // Aksi Bookmark (dari AJAX/Fetch)
@@ -89,11 +86,23 @@ Route::middleware(['auth:wisatawan'])->group(function () {
 
 });
 
-
-//untuk administrator ikaa canZ
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.admin');
-Route::get('/tempat-wisata', [TempatWisataController::class, 'index'])->name('tempat-wisata');
-Route::prefix('verifikasi-wisata')->group(function () {
-Route::get('/{id}/detail', [VerifikasiDetailController::class, 'showDetail'])->name('verifikasi.detail');
-Route::post('/{id}/update', [VerifikasiDetailController::class, 'updateStatus'])->name('verifikasi.update');
-});
+Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+Route::post('/admin/toggle/{id}', [AdminController::class, 'toggleStatus'])->name('admin.toggle');
+Route::post('/admin/delete/{id}', [AdminController::class, 'destroy'])->name('admin.delete');
+Route::get('/admin/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::post('/admin/profile', [ProfileController::class, 'update'])->name('profile.update');
+Route::get('/admin/wisata', [WisataController::class, 'index'])->name('wisata.index');
+Route::get('/admin/wisata/review/{id}', [WisataController::class, 'review'])->name('wisata.review');
+Route::post('/admin/wisata/approve/{id}', [WisataController::class, 'approve'])->name('wisata.approve');
+Route::get('/admin/wisata', [WisataController::class, 'index'])->name('wisata.index');
+Route::delete('/admin/wisata/delete/{id}', [WisataController::class, 'destroy'])->name('wisata.delete');
+Route::get('/admin/wisata/review/{id}', [WisataController::class, 'review'])->name('wisata.review');
+Route::post('/admin/wisata/approve/{id}', [WisataController::class, 'approve'])->name('wisata.approve');
+Route::post('/admin/wisata/revisi/{id}', [WisataController::class, 'revisi'])->name('wisata.revisi');
+Route::delete('/admin/wisata/delete/{id}', [WisataController::class, 'destroy'])->name('wisata.delete');
+Route::get('/admin/wisata/tambah', [WisataController::class, 'create'])->name('wisata.create');
+Route::post('/admin/wisata/simpan', [WisataController::class, 'store'])->name('wisata.store');
+Route::get('/admin/users/create', function() {
+ return view('admin', ['page' => 'tambah_user', 'users' => \App\Models\User::all()]);
+})->name('admin.user.create');
+Route::post('/admin/users/store', [AdminController::class, 'storeUser'])->name('admin.user.store');
