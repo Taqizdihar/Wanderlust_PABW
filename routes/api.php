@@ -40,10 +40,9 @@ Route::get('/wisata', [WisataApiController::class, 'index']);
 Route::post('/wisata', [WisataApiController::class, 'store']);
 Route::patch('/wisata/{id}/approve', [WisataApiController::class, 'approve']);
 Route::delete('/wisata/{id}', [WisataApiController::class, 'destroy']);
-<<<<<<< HEAD
+
 Route::put('users/{id}', [WisatawanApiController::class, 'update']);
 Route::put('wisata/{id}', [WisataApiController::class, 'update']);
-=======
 
 Route::prefix('user')->group(function () {
     $namespace = 'App\Http\Controllers\Wisatawan';
@@ -69,4 +68,3 @@ Route::prefix('user')->group(function () {
     // Endpoint Penilaian
     Route::post('/penilaian', [$namespace . '\PenilaianController', 'store']);
 });
->>>>>>> b164a16cb4e9888b958a9067895ec919c39a5a1c
