@@ -20,23 +20,22 @@ class WisataController extends Controller
         ]);
     }
 
-    // Simpan Wisata Baru (Create)
     public function store(Request $request) {
-        $request->validate([
-            'nama_wisata' => 'required',
-            'pemilik' => 'required',
-            'deskripsi' => 'required',
-        ]);
+    $request->validate([
+        'nama_wisata' => 'required',
+        'pemilik'     => 'required', // Ini nama dari inputan form Blade kamu
+        'deskripsi'   => 'required',
+    ]);
 
-        Wisata::create([
-            'nama_wisata' => $request->nama_wisata,
-            'pemilik'     => $request->pemilik,
-            'deskripsi'   => $request->deskripsi,
-            'status'      => 'pending' // Status awal otomatis pending
-        ]);
+    \App\Models\Wisata::create([
+        'nama_tempat'   => $request->nama_wisata,
+        'alamat_tempat' => $request->pemilik, // Kita simpan data "Pemilik" ke kolom "alamat_tempat" biar gak error
+        'deskripsi'     => $request->deskripsi,
+        'status'        => 'pending'
+    ]);
 
-        return redirect()->route('admin.index', ['page' => 'wisata'])->with('success', 'Wisata berhasil ditambahkan!');
-    }
+    return redirect()->route('admin.index', ['page' => 'wisata'])->with('success', 'Wisata berhasil disimpan!');
+}
 
     // Proses Approve (Update Status jadi Selesai/Approved)
     public function approve($id) {
