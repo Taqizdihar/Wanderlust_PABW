@@ -3,8 +3,8 @@
 use App\Http\Controllers\Api\ApiFlutterController;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Api\WisatawanApiController;
-use App\Http\Controllers\Api\WisataApiController;
+use App\Http\Controllers\Api\admin\WisatawanApiController;
+use App\Http\Controllers\Api\admin\WisataApiController;
 
 
 // Rute untuk Flutter (Tanpa Middleware Auth dahulu agar mudah dites dengan Postman)
@@ -33,10 +33,6 @@ Route::prefix('flutter')->group(function () {
 
 // admin
 
-
-
-
-// --- CRUD USER (Tabel: wisatawan) ---
 Route::get('/users', [WisatawanApiController::class, 'index']);
 Route::post('/users', [WisatawanApiController::class, 'store']);
 Route::patch('/users/{id}/status', [WisatawanApiController::class, 'updateStatus']);
