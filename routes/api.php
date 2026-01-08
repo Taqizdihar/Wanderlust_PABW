@@ -3,18 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthApiController;
 use App\Http\Controllers\Api\Ptw\managePropertiesController;
+use App\Http\Controllers\Api\Ptw\manageTicketsController;
+use App\Http\Controllers\Api\Ptw\profilPTWController;
 
-<<<<<<< HEAD
-use App\Http\Controllers\Api\WisatawanApiController;
-use App\Http\Controllers\Api\WisataApiController;
-
-
-// Rute untuk Flutter (Tanpa Middleware Auth dahulu agar mudah dites dengan Postman)
-Route::prefix('flutter')->group(function () {
-=======
 Route::post('/register', [AuthApiController::class, 'register']);
 Route::post('/login', [AuthApiController::class, 'login']);
->>>>>>> ea15caa7f9257bbc5f984cf2a39339e8e908fbcd
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthApiController::class, 'logout']);
