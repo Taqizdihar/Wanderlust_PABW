@@ -1,7 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\LoginController; //untuk autentikasi
-use App\Http\Controllers\Admin\DashboardController; //untuk administrator
+use App\Http\Controllers\Auth\LoginController; 
+use App\Http\Controllers\Admin\DashboardController; 
 use App\Http\Controllers\Admin\TempatWisataController;
 use App\Http\Controllers\Admin\VerifikasiDetailController;
 use App\Http\Controllers\Ptw\AddPropertyPTWController; //untuk pemilik tempat wisata
@@ -20,9 +20,11 @@ use App\Http\Controllers\Wisatawan\PencarianController;
 use App\Http\Controllers\Wisatawan\PenilaianController;
 use App\Http\Controllers\Wisatawan\PesanTiketController;
 use App\Http\Controllers\Wisatawan\ProfilController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\WisataController;
+// Tambahkan folder \Admin\ setelah Controllers
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\WisataController;
+
 
 //untuk autentikasi - umum
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
@@ -85,23 +87,25 @@ Route::middleware(['auth:wisatawan'])->group(function () {
 
 });
 
+// Redirect awal ke admin biar gak bingung
+Route::get('/', function () { return redirect('/admin'); });
+
+// --- GROUP ADMIN ---
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-Route::post('/admin/toggle/{id}', [AdminController::class, 'toggleStatus'])->name('admin.toggle');
-Route::post('/admin/delete/{id}', [AdminController::class, 'destroy'])->name('admin.delete');
-Route::get('/admin/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-Route::post('/admin/profile', [ProfileController::class, 'update'])->name('profile.update');
-Route::get('/admin/wisata', [WisataController::class, 'index'])->name('wisata.index');
-Route::get('/admin/wisata/review/{id}', [WisataController::class, 'review'])->name('wisata.review');
-Route::post('/admin/wisata/approve/{id}', [WisataController::class, 'approve'])->name('wisata.approve');
-Route::get('/admin/wisata', [WisataController::class, 'index'])->name('wisata.index');
+Route::patch('/admin/toggle/{id}', [AdminController::class, 'toggleStatus'])->name('admin.toggle');
+Route::delete('/admin/destroy/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
+Route::post('/admin/users/store', [AdminController::class, 'storeUser'])->name('admin.storeUser');
+
+// --- GROUP WISATA (CRUD) ---
+Route::patch('/admin/wisata/approve/{id}', [WisataController::class, 'approve'])->name('wisata.approve');
+Route::patch('/admin/wisata/revisi/{id}', [WisataController::class, 'revisi'])->name('wisata.revisi');
 Route::delete('/admin/wisata/delete/{id}', [WisataController::class, 'destroy'])->name('wisata.delete');
-Route::get('/admin/wisata/review/{id}', [WisataController::class, 'review'])->name('wisata.review');
-Route::post('/admin/wisata/approve/{id}', [WisataController::class, 'approve'])->name('wisata.approve');
-Route::post('/admin/wisata/revisi/{id}', [WisataController::class, 'revisi'])->name('wisata.revisi');
-Route::delete('/admin/wisata/delete/{id}', [WisataController::class, 'destroy'])->name('wisata.delete');
-Route::get('/admin/wisata/tambah', [WisataController::class, 'create'])->name('wisata.create');
 Route::post('/admin/wisata/simpan', [WisataController::class, 'store'])->name('wisata.store');
-Route::get('/admin/users/create', function() {
- return view('admin', ['page' => 'tambah_user', 'users' => \App\Models\User::all()]);
-})->name('admin.user.create');
-Route::post('/admin/users/store', [AdminController::class, 'storeUser'])->name('admin.user.store');
+
+// --- GROUP PROFILE ---
+Route::patch('/admin/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
+Route::post('/logout', function () {
+    auth()->logout();
+    return redirect('/');
+})->name('logout');
