@@ -51,9 +51,7 @@ Route::middleware(['auth', 'cekRole:pemilik'])->group(function () {
 });
 
 
-// ----------------------------------------------------
 // ROUTE PUBLIK (TIDAK MEMERLUKAN LOGIN / GUEST ACCESS)
-// ----------------------------------------------------
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/homeWisatawan', function () {
     return redirect('/home');
