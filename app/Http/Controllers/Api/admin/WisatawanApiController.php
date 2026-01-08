@@ -1,29 +1,31 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Wisatawan;
 use Illuminate\Http\Request;
 
-class WisatawanApiController extends Controller {
-    // TAMPILKAN SEMUA USER
+class WisatawanApiController extends Controller 
+{
+    // 1. LIHAT SEMUA USER (GET)
     public function index() {
         return response()->json(Wisatawan::all(), 200);
     }
 
-    // TAMBAH USER MANUAL
+    // 2. TAMBAH USER MANUAL (POST)
     public function store(Request $request) {
         $user = Wisatawan::create([
-            'nama' => $request->nama,
-            'email' => $request->email,
-            'password' => bcrypt('password123'),
-            'no_hp' => $request->no_hp,
-            'status' => 'AKTIF'
+            'nama'     => $request->nama,
+            'email'    => $request->email,
+            'password' => bcrypt($request->password ?? 'password123'),
+            'no_hp'    => $request->no_hp,
+            'status'   => 'AKTIF'
         ]);
         return response()->json(['message' => 'User Berhasil Ditambah', 'data' => $user], 201);
     }
 
-    // UPDATE STATUS (AKTIF/NON-AKTIF)
+    // 3. UPDATE STATUS AKTIF/NON-AKTIF (PATCH)
     public function updateStatus($id) {
         $user = Wisatawan::find($id);
         if (!$user) return response()->json(['message' => 'User tidak ditemukan'], 404);
@@ -31,5 +33,14 @@ class WisatawanApiController extends Controller {
         $user->status = ($user->status == 'AKTIF') ? 'NON-AKTIF' : 'AKTIF';
         $user->save();
         return response()->json(['message' => 'Status Berhasil Diubah', 'data' => $user], 200);
+    }
+
+    // 4. HAPUS USER (DELETE)
+    public function destroy($id) {
+        $user = Wisatawan::find($id);
+        if (!$user) return response()->json(['message' => 'User tidak ditemukan'], 404);
+        
+        $user->delete();
+        return response()->json(['message' => 'User Berhasil Dihapus'], 200);
     }
 }

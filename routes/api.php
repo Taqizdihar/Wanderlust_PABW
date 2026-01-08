@@ -40,3 +40,6 @@ Route::patch('/users/{id}/status', [WisatawanApiController::class, 'updateStatus
 Route::get('/wisata', [WisataApiController::class, 'index']);
 Route::post('/wisata', [WisataApiController::class, 'store']);
 Route::patch('/wisata/{id}/approve', [WisataApiController::class, 'approve']);
+
+// Cara panggil yang paling aman buat ujian besok:
+Route::get('/users', [WisatawanApiController::class, 'index']);
