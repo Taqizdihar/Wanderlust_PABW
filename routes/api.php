@@ -4,8 +4,17 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthApiController;
 use App\Http\Controllers\Api\Ptw\managePropertiesController;
 
+<<<<<<< HEAD
+use App\Http\Controllers\Api\WisatawanApiController;
+use App\Http\Controllers\Api\WisataApiController;
+
+
+// Rute untuk Flutter (Tanpa Middleware Auth dahulu agar mudah dites dengan Postman)
+Route::prefix('flutter')->group(function () {
+=======
 Route::post('/register', [AuthApiController::class, 'register']);
 Route::post('/login', [AuthApiController::class, 'login']);
+>>>>>>> ea15caa7f9257bbc5f984cf2a39339e8e908fbcd
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthApiController::class, 'logout']);
@@ -24,18 +33,18 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // admin
-use App\Http\Controllers\Api\WisatawanApiController;
-use App\Http\Controllers\Api\WisataApiController;
 
-// Route untuk Wisatawan
+
+
+
+// --- CRUD USER (Tabel: wisatawan) ---
 Route::get('/users', [WisatawanApiController::class, 'index']);
 Route::post('/users', [WisatawanApiController::class, 'store']);
 Route::patch('/users/{id}/status', [WisatawanApiController::class, 'updateStatus']);
+Route::delete('/users/{id}', [WisatawanApiController::class, 'destroy']);
 
-// Route untuk Wisata
+// --- CRUD WISATA (Tabel: tempat_wisatas) ---
 Route::get('/wisata', [WisataApiController::class, 'index']);
 Route::post('/wisata', [WisataApiController::class, 'store']);
 Route::patch('/wisata/{id}/approve', [WisataApiController::class, 'approve']);
-
-// Cara panggil yang paling aman buat ujian besok:
-Route::get('/users', [WisatawanApiController::class, 'index']);
+Route::delete('/wisata/{id}', [WisataApiController::class, 'destroy']);
