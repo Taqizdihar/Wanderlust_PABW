@@ -10,26 +10,31 @@ use App\Models\Wisatawan;
 class AdminController extends Controller
 {
     public function index(Request $request)
-    {
-        $page = $request->query('page', 'dashboard');
-        
-        // Ambil user yang sedang login untuk profil sidebar
-        $user = auth()->user() ?? User::first(); 
-        
-        $users = Wisatawan::all(); 
-    $wisatas = Wisata::all();
-
-        $wisata_single = null;
-        if($page == 'review_detail' && $request->has('id')) {
-            $wisata_single = Wisata::find($request->query('id'));
-        }
-
-        $chartLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'];
-        $chartData = [45, 70, 55, 90, 130, 110];
-
-        return view('admin', compact('page', 'user', 'users', 'wisatas', 'wisata_single', 'chartLabels', 'chartData'));
+{
+    $page = $request->query('page', 'dashboard');
+    
+    // Ambil user login, kalau belum login ambil user pertama di DB
+    $user = auth()->user() ?? \App\Models\User::first(); 
+    
+    // Pakai try-catch biar kalau tabel 'wisatawan' atau 'tempat_wisatas' belum ada, gak langsung 500
+    try {
+        $users = \App\Models\Wisatawan::all() ?? collect(); 
+        $wisatas = \App\Models\Wisata::all() ?? collect();
+    } catch (\Exception $e) {
+        $users = collect();
+        $wisatas = collect();
     }
 
+    $wisata_single = null;
+    if($page == 'review_detail' && $request->has('id')) {
+        $wisata_single = \App\Models\Wisata::find($request->query('id'));
+    }
+
+    $chartLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'];
+    $chartData = [45, 70, 55, 90, 130, 110];
+
+    return view('admin', compact('page', 'user', 'users', 'wisatas', 'wisata_single', 'chartLabels', 'chartData'));
+}
     public function storeUser(Request $request)
     {
         $request->validate([
@@ -59,13 +64,13 @@ class AdminController extends Controller
         return back()->with('error', "Wisatawan tidak ditemukan!");
     }
 
-    public function destroy($id)
-    {
-        $user = Wisatawan::find($id);
-        if ($user) {
-            $user->delete();
-            return back()->with('success', "Wisatawan berhasil dihapus!");
-        }
-        return back();
+  public function destroy($id)
+{
+    $user = \App\Models\Wisatawan::find($id);
+    if ($user) {
+        $user->delete();
+        return back()->with('success', 'Data wisatawan berhasil dihapus!');
     }
+    return back()->with('error', 'Data tidak ditemukan!');
+}
 }

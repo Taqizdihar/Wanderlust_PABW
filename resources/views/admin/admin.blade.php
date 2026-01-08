@@ -34,7 +34,8 @@
 
             <div class="absolute bottom-0 w-64 p-6 bg-indigo-950">
                 <div class="flex items-center gap-3">
-                    <img src="{{ $user->foto ?? 'https://ui-avatars.com/api/?name=' . ($user->name ?? 'Admin') }}" class="w-10 h-10 rounded-full border-2 border-indigo-400">
+                    {{-- Sesuaikan: Kalau di DB kolomnya 'foto', pastikan terpanggil --}}
+                    <img src="{{ $user->foto ?? 'https://ui-avatars.com/api/?name=' . ($user->name ?? 'Admin') }}" class="w-10 h-10 rounded-full border-2 border-indigo-400 object-cover">
                     <div class="overflow-hidden">
                         <p class="text-sm font-semibold truncate">{{ $user->name ?? 'Admin Riska' }}</p>
                         <a href="?page=profile" class="text-xs text-indigo-300 hover:text-white transition">Edit Profil</a>
@@ -58,6 +59,7 @@
                         <i class="fas fa-bell text-xl"></i>
                         <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
                     </button>
+                    {{-- Logout logic --}}
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button type="submit" class="text-gray-600 hover:text-red-600 font-medium px-4 py-2 rounded-lg hover:bg-red-50 transition">
@@ -79,6 +81,7 @@
                 @endif
 
                 @if($page == 'dashboard')
+                    {{-- TAMPILAN DASHBOARD --}}
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                             <div class="flex justify-between items-start">
@@ -121,6 +124,7 @@
                     </div>
 
                 @elseif($page == 'users')
+                    {{-- TAMPILAN KELOLA USER/WISATAWAN --}}
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                         <div class="p-6 border-b border-gray-100 flex justify-between items-center">
                             <h3 class="font-bold text-gray-800">Daftar Wisatawan Terdaftar</h3>
@@ -142,11 +146,12 @@
                                 @forelse($users as $u)
                                 <tr class="hover:bg-gray-50 transition">
                                     <td class="px-6 py-4 font-medium">#{{ $u->id }}</td>
-                                    <td class="px-6 py-4">{{ $u->nama }}</td>
+                                    {{-- SESUAIKAN: Kalau di DB kolomnya 'nama', tetap $u->nama --}}
+                                    <td class="px-6 py-4">{{ $u->nama }}</td> 
                                     <td class="px-6 py-4">{{ $u->email }}</td>
                                     <td class="px-6 py-4">
-                                        <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $u->status == 'AKTIF' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                                            {{ $u->status }}
+                                        <span class="px-3 py-1 rounded-full text-xs font-semibold {{ ($u->status == 'AKTIF' || $u->status == 'aktif') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                            {{ strtoupper($u->status) }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4">
@@ -167,18 +172,19 @@
                                     </td>
                                 </tr>
                                 @empty
-                                <tr><td colspan="5" class="p-6 text-center text-gray-500">Belum ada data wisatawan.</td></tr>
+                                <tr><td colspan="5" class="p-6 text-center text-gray-500">Belum ada data di database wanderlust.</td></tr>
                                 @endforelse
                             </tbody>
                         </table>
                     </div>
 
                 @elseif($page == 'wisata')
+                    {{-- TAMPILAN KELOLA WISATA (Cards) --}}
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @forelse($wisatas as $w)
                         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition">
                             <div class="h-48 bg-gray-200 relative">
-                                <img src="https://source.unsplash.com/random/400x300?nature,travel&sig={{ $w->id }}" class="w-full h-full object-cover">
+                                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80&sig={{ $w->id }}" class="w-full h-full object-cover">
                                 <div class="absolute top-4 right-4">
                                     <span class="px-3 py-1 rounded-full text-xs font-bold uppercase shadow-sm
                                         {{ $w->status == 'approved' ? 'bg-green-500 text-white' : ($w->status == 'pending' ? 'bg-orange-500 text-white' : 'bg-gray-500 text-white') }}">
@@ -187,6 +193,7 @@
                                 </div>
                             </div>
                             <div class="p-6">
+                                {{-- SESUAIKAN: Nama Kolom di Tabel tempat_wisatas --}}
                                 <h4 class="font-bold text-lg text-gray-800 mb-1">{{ $w->nama_wisata }}</h4>
                                 <p class="text-sm text-gray-500 mb-4 flex items-center">
                                     <i class="fas fa-user-circle mr-2"></i> Pemilik: {{ $w->pemilik }}
@@ -197,15 +204,16 @@
                             </div>
                         </div>
                         @empty
-                        <div class="col-span-full text-center py-12 text-gray-500">Belum ada destinasi wisata yang didaftarkan.</div>
+                        <div class="col-span-full text-center py-12 text-gray-500">Belum ada data di tabel tempat_wisatas.</div>
                         @endforelse
                     </div>
 
                 @elseif($page == 'review_detail' && isset($wisata_single))
+                    {{-- TAMPILAN DETAIL REVIEW --}}
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                         <div class="md:flex">
                             <div class="md:w-1/2">
-                                <img src="https://source.unsplash.com/random/800x600?nature,travel&sig={{ $wisata_single->id }}" class="w-full h-full object-cover">
+                                <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover">
                             </div>
                             <div class="md:w-1/2 p-10">
                                 <div class="flex items-center gap-2 mb-4">
@@ -233,8 +241,8 @@
                                 <div class="flex gap-4 border-t pt-8">
                                     <form action="{{ route('wisata.approve', $wisata_single->id) }}" method="POST" class="flex-1">
                                         @csrf @method('PATCH')
-                                        <button class="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 shadow-lg shadow-green-200 transition">
-                                            <i class="fas fa-check-circle mr-2"></i> Approve Sekarang
+                                        <button class="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 shadow-lg transition">
+                                            <i class="fas fa-check-circle mr-2"></i> Approve
                                         </button>
                                     </form>
                                     <form action="{{ route('wisata.revisi', $wisata_single->id) }}" method="POST" class="flex-1">
@@ -249,16 +257,14 @@
                     </div>
 
                 @elseif($page == 'profile')
+                    {{-- TAMPILAN PROFIL --}}
                     <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
                         <div class="text-center mb-8">
                             <div class="relative inline-block">
                                 <img src="{{ $user->foto ?? 'https://ui-avatars.com/api/?name=' . ($user->name ?? 'Admin') }}" class="w-32 h-32 rounded-full border-4 border-indigo-50 shadow-md mx-auto mb-4 object-cover">
-                                <button class="absolute bottom-4 right-0 bg-white p-2 rounded-full shadow-md border text-indigo-600 hover:text-indigo-800">
-                                    <i class="fas fa-camera"></i>
-                                </button>
                             </div>
                             <h3 class="text-2xl font-bold text-gray-800">{{ $user->name ?? 'Admin Riska' }}</h3>
-                            <p class="text-gray-500 italic">"{{ $user->bio ?? 'Belum ada bio.' }}"</p>
+                            <p class="text-gray-500 italic">"{{ $user->bio ?? 'Halo admin!' }}"</p>
                         </div>
 
                         <form action="{{ route('profile.update') }}" method="POST" class="space-y-6">
@@ -266,19 +272,19 @@
                             <div class="grid grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Lengkap</label>
-                                    <input type="text" name="name" value="{{ $user->name }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                                    <input type="text" name="name" value="{{ $user->name }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Alamat Email</label>
-                                    <input type="email" name="email" value="{{ $user->email }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                                    <input type="email" name="email" value="{{ $user->email }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none">
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Bio Singkat</label>
-                                <textarea name="bio" rows="3" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">{{ $user->bio }}</textarea>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Bio</label>
+                                <textarea name="bio" rows="3" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none">{{ $user->bio }}</textarea>
                             </div>
-                            <button type="submit" class="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition">
-                                Simpan Perubahan Profil
+                            <button type="submit" class="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700 transition">
+                                Simpan Perubahan
                             </button>
                         </form>
                     </div>
@@ -296,12 +302,12 @@
             <form action="{{ route('admin.storeUser') }}" method="POST" class="space-y-4">
                 @csrf
                 <div>
-                    <label class="block text-sm font-medium mb-1">Nama Wisatawan</label>
-                    <input type="text" name="nama" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-sm font-medium mb-1">Nama</label>
+                    <input type="text" name="nama" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">Email</label>
-                    <input type="email" name="email" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    <input type="email" name="email" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
                 </div>
                 <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition mt-4">
                     Simpan Data

@@ -85,23 +85,25 @@ Route::middleware(['auth:wisatawan'])->group(function () {
 
 });
 
+// Redirect awal ke admin biar gak bingung
+Route::get('/', function () { return redirect('/admin'); });
+
+// --- GROUP ADMIN ---
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-Route::post('/admin/toggle/{id}', [AdminController::class, 'toggleStatus'])->name('admin.toggle');
-Route::post('/admin/delete/{id}', [AdminController::class, 'destroy'])->name('admin.delete');
-Route::get('/admin/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-Route::post('/admin/profile', [ProfileController::class, 'update'])->name('profile.update');
-Route::get('/admin/wisata', [WisataController::class, 'index'])->name('wisata.index');
-Route::get('/admin/wisata/review/{id}', [WisataController::class, 'review'])->name('wisata.review');
-Route::post('/admin/wisata/approve/{id}', [WisataController::class, 'approve'])->name('wisata.approve');
-Route::get('/admin/wisata', [WisataController::class, 'index'])->name('wisata.index');
+Route::patch('/admin/toggle/{id}', [AdminController::class, 'toggleStatus'])->name('admin.toggle');
+Route::delete('/admin/destroy/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
+Route::post('/admin/users/store', [AdminController::class, 'storeUser'])->name('admin.storeUser');
+
+// --- GROUP WISATA (CRUD) ---
+Route::patch('/admin/wisata/approve/{id}', [WisataController::class, 'approve'])->name('wisata.approve');
+Route::patch('/admin/wisata/revisi/{id}', [WisataController::class, 'revisi'])->name('wisata.revisi');
 Route::delete('/admin/wisata/delete/{id}', [WisataController::class, 'destroy'])->name('wisata.delete');
-Route::get('/admin/wisata/review/{id}', [WisataController::class, 'review'])->name('wisata.review');
-Route::post('/admin/wisata/approve/{id}', [WisataController::class, 'approve'])->name('wisata.approve');
-Route::post('/admin/wisata/revisi/{id}', [WisataController::class, 'revisi'])->name('wisata.revisi');
-Route::delete('/admin/wisata/delete/{id}', [WisataController::class, 'destroy'])->name('wisata.delete');
-Route::get('/admin/wisata/tambah', [WisataController::class, 'create'])->name('wisata.create');
 Route::post('/admin/wisata/simpan', [WisataController::class, 'store'])->name('wisata.store');
-Route::get('/admin/users/create', function() {
- return view('admin', ['page' => 'tambah_user', 'users' => \App\Models\User::all()]);
-})->name('admin.user.create');
-Route::post('/admin/users/store', [AdminController::class, 'storeUser'])->name('admin.user.store');
+
+// --- GROUP PROFILE ---
+Route::patch('/admin/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
+Route::post('/logout', function () {
+    auth()->logout();
+    return redirect('/');
+})->name('logout');
