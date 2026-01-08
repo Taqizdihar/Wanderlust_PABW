@@ -7,8 +7,9 @@ use App\Http\Controllers\Api\Ptw\manageTicketsController;
 use App\Http\Controllers\Api\Ptw\profilPTWController;
 
 //Admin
-use App\Http\Controllers\Api\Admin\WisatawanApiController;
-use App\Http\Controllers\Api\Admin\WisataApiController;
+use App\Http\Controllers\Api\admin\WisatawanApiController;
+use App\Http\Controllers\Api\admin\WisataApiController;
+
 
 Route::post('/register', [AuthApiController::class, 'register']);
 Route::post('/login', [AuthApiController::class, 'login']);
@@ -35,19 +36,17 @@ Route::middleware('auth:sanctum')->group(function () {
 
 //admin
 
-Route::get('/users', [WisatawanApiController::class, 'index']);
-Route::post('/users', [WisatawanApiController::class, 'store']);
-Route::patch('/users/{id}/status', [WisatawanApiController::class, 'updateStatus']);
-Route::delete('/users/{id}', [WisatawanApiController::class, 'destroy']);
 
-Route::get('/wisata', [WisataApiController::class, 'index']);
-Route::post('/wisata', [WisataApiController::class, 'store']);
-Route::patch('/wisata/{id}/approve', [WisataApiController::class, 'approve']);
-Route::delete('/wisata/{id}', [WisataApiController::class, 'destroy']);
+// --- ROUTE UNTUK WISATAWAN ---
+Route::get('users', [WisatawanApiController::class, 'index']);
+Route::post('users', [WisatawanApiController::class, 'store']);
+Route::put('users/{id}', [WisatawanApiController::class, 'update']); // <--- JALAN UNTUK EDIT
+Route::patch('users/{id}/status', [WisatawanApiController::class, 'updateStatus']);
+Route::delete('users/{id}', [WisatawanApiController::class, 'destroy']);
 
-
-
-//
-
-Route::put('users/{id}', [WisatawanApiController::class, 'update']);
-Route::put('wisata/{id}', [WisataApiController::class, 'update']);
+// --- ROUTE UNTUK TEMPAT WISATA ---
+Route::get('wisata', [WisataApiController::class, 'index']);
+Route::post('wisata', [WisataApiController::class, 'store']);
+Route::put('wisata/{id}', [WisataApiController::class, 'update']); // <--- JALAN UNTUK EDIT (BIAR GAK ERROR PUT)
+Route::patch('wisata/{id}/approve', [WisataApiController::class, 'approve']);
+Route::delete('wisata/{id}', [WisataApiController::class, 'destroy']);
