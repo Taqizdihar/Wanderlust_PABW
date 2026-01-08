@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\AuthApiController;
 use App\Http\Controllers\Api\Ptw\managePropertiesController;
 use App\Http\Controllers\Api\Ptw\manageTicketsController;
 use App\Http\Controllers\Api\Ptw\profilPTWController;
+
+//Admin
 use App\Http\Controllers\Api\Admin\WisatawanApiController;
 use App\Http\Controllers\Api\Admin\WisataApiController;
 
@@ -31,6 +33,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthApiController::class, 'logout']);
 });
 
+//admin
+
 Route::get('/users', [WisatawanApiController::class, 'index']);
 Route::post('/users', [WisatawanApiController::class, 'store']);
 Route::patch('/users/{id}/status', [WisatawanApiController::class, 'updateStatus']);
@@ -40,33 +44,10 @@ Route::get('/wisata', [WisataApiController::class, 'index']);
 Route::post('/wisata', [WisataApiController::class, 'store']);
 Route::patch('/wisata/{id}/approve', [WisataApiController::class, 'approve']);
 Route::delete('/wisata/{id}', [WisataApiController::class, 'destroy']);
-<<<<<<< HEAD
+
+
+
+//
+
 Route::put('users/{id}', [WisatawanApiController::class, 'update']);
 Route::put('wisata/{id}', [WisataApiController::class, 'update']);
-=======
-
-Route::prefix('user')->group(function () {
-    $namespace = 'App\Http\Controllers\Wisatawan';
-
-    // Endpoint Home
-    Route::get('/home', [$namespace . '\HomeController', 'index']);
-    
-    // Endpoint Destinasi & Pencarian
-    Route::get('/destinasi', [$namespace . '\DestinasiController', 'index']);
-    Route::get('/pencarian', [$namespace . '\PencarianController', 'index']);
-    
-    // Endpoint Profil & Edit Profil
-    Route::get('/profil', [$namespace . '\ProfilController', 'index']);
-    Route::post('/profil/update', [$namespace . '\editProfilController', 'update']);
-    
-    // Endpoint Bookmark
-    Route::get('/bookmark', [$namespace . '\BookmarkController', 'index']);
-    Route::post('/bookmark', [$namespace . '\BookmarkController', 'store']);
-    
-    // Endpoint Pesan Tiket
-    Route::post('/pesan-tiket', [$namespace . '\PesanTiketController', 'store']);
-    
-    // Endpoint Penilaian
-    Route::post('/penilaian', [$namespace . '\PenilaianController', 'store']);
-});
->>>>>>> b164a16cb4e9888b958a9067895ec919c39a5a1c
