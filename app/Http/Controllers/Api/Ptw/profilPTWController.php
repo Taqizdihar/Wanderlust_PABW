@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Models\User;
 
 class profilPTWController extends Controller {
 
@@ -55,7 +56,7 @@ class profilPTWController extends Controller {
                 'jabatan', 
                 'nama_organisasi', 
                 'alamat_bisnis'
-            ])); //
+            ]));
         }
 
         return response()->json([
