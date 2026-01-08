@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Ptw\managePropertiesController;
 use App\Http\Controllers\Api\Ptw\manageTicketsController;
 use App\Http\Controllers\Api\Ptw\profilPTWController;
 
+// JANGAN GANNGU!!!!!!
 //Admin
 use App\Http\Controllers\Api\admin\WisatawanApiController;
 use App\Http\Controllers\Api\admin\WisataApiController;
@@ -34,6 +35,8 @@ Route::middleware('auth:sanctum')->prefix('ptw')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthApiController::class, 'logout']);
 });
+
+// JANGAN GANGGU!!!!!
 //admin
 // --- ROUTE UNTUK WISATAWAN ---
 Route::get('users', [WisatawanApiController::class, 'index']);
@@ -48,6 +51,8 @@ Route::post('wisata', [WisataApiController::class, 'store']);
 Route::put('wisata/{id}', [WisataApiController::class, 'update']); 
 Route::patch('wisata/{id}/approve', [WisataApiController::class, 'approve']);
 Route::delete('wisata/{id}', [WisataApiController::class, 'destroy']);
+// Pastikan tidak ada typo di kata 'users'
+Route::post('users', [WisatawanApiController::class, 'store']);
 
 // --- ROUTE UNTUK PROFILE USER ---
 Route::get('profile', [ProfileApiController::class, 'index']);      
@@ -55,7 +60,7 @@ Route::post('profile', [ProfileApiController::class, 'store']);
 Route::put('profile/{id}', [ProfileApiController::class, 'update']); 
 Route::delete('profile/{id}', [ProfileApiController::class, 'destroy']);
 
-
+// JANGAN GANNGU!!!!!!
 
 
 

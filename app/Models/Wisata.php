@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class Wisata extends Model {
-    protected $table = 'tempat_wisatas'; // Sesuaikan dengan nama tabel di phpMyAdmin kamu
+   protected $table = 'tempat_wisatas'; // Pastikan ada huruf 's' di belakangnya
     protected $primaryKey = 'id_tempat'; // WAJIB ADA INI biar gak error find($id)
 
     protected $fillable = [
