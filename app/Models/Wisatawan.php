@@ -6,8 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Wisatawan extends Model
 {
-    // Jika di database barumu namanya 'wisatawans', ganti ini ya beb!
-    protected $table = 'wisatawan'; 
+    protected $table = 'wisatawan'; // Nama tabel kamu
+    protected $primaryKey = 'id_wisatawan'; // Kasih tahu Laravel kalau PK kamu id_wisatawan
 
-    protected $fillable = ['nama', 'email', 'status'];
+    protected $fillable = [
+        'nama', 
+        'email', 
+        'password', 
+        'no_hp', 
+        'status'
+    ];
 }
