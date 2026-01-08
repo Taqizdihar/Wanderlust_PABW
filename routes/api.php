@@ -43,3 +43,5 @@ Route::get('/wisata', [WisataApiController::class, 'index']);
 Route::post('/wisata', [WisataApiController::class, 'store']);
 Route::patch('/wisata/{id}/approve', [WisataApiController::class, 'approve']);
 Route::delete('/wisata/{id}', [WisataApiController::class, 'destroy']);
+Route::put('users/{id}', [WisatawanApiController::class, 'update']);
+Route::put('wisata/{id}', [WisataApiController::class, 'update']);

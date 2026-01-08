@@ -53,23 +53,28 @@ class WisatawanApiController extends Controller
         ], 201);
     }
 
-    // 4. UPDATE STATUS AKTIF/NON-AKTIF (PATCH /api/users/{id}/status)
-    public function updateStatus($id) {
-        $user = Wisatawan::find($id);
-        if (!$user) {
-            return response()->json(['message' => 'User tidak ditemukan'], 404);
-        }
-        
-        // Logika ganti status otomatis
-        $user->status = ($user->status == 'AKTIF') ? 'NON-AKTIF' : 'AKTIF';
-        $user->save();
+    // 6. EDIT / UPDATE WISATAWAN (PUT /api/users/{id})
+public function update(Request $request, $id) {
+    $user = Wisatawan::find($id);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Status Berhasil Diubah jadi ' . $user->status,
-            'data'    => $user
-        ], 200);
+    if (!$user) {
+        return response()->json(['message' => 'User tidak ditemukan'], 404);
     }
+
+    $user->update([
+        'nama'     => $request->nama ?? $user->nama,
+        'email'    => $request->email ?? $user->email,
+        'no_hp'    => $request->no_hp ?? $user->no_hp,
+        // Password diupdate hanya jika diisi di Postman
+        'password' => $request->password ? bcrypt($request->password) : $user->password,
+    ]);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Data Wisatawan berhasil diupdate!',
+        'data'    => $user
+    ], 200);
+}
 
     // 5. HAPUS USER (DELETE /api/users/{id})
     public function destroy($id) {
