@@ -9,17 +9,12 @@ use App\Models\TiketTempatWisata;
 use App\Models\TempatWisata;
 use Illuminate\Support\Facades\Validator;
 
-class manageTicketsController extends Controller
-{
-    /**
-     * 1. Menampilkan semua tiket untuk satu tempat wisata tertentu.
-     */
-    public function index($id_wisata)
-    {
+class manageTicketsController extends Controller {
+
+    public function index($id_wisata) {
         $user = Auth::user();
         $ptw = $user->pemilikTempatWisata;
 
-        // Verifikasi kepemilikan properti sebelum menampilkan tiketnya
         $property = TempatWisata::where('id_wisata', $id_wisata)
                                 ->where('id_ptw', $ptw->id_ptw)
                                 ->first();
@@ -36,15 +31,10 @@ class manageTicketsController extends Controller
         ], 200);
     }
 
-    /**
-     * 2. Menambahkan tiket baru ke properti tertentu.
-     */
-    public function store(Request $request, $id_wisata)
-    {
+    public function store(Request $request, $id_wisata) {
         $user = Auth::user();
         $ptw = $user->pemilikTempatWisata;
 
-        // Pastikan properti tersebut milik PTW yang login
         $property = TempatWisata::where('id_wisata', $id_wisata)
                                 ->where('id_ptw', $ptw->id_ptw)
                                 ->first();
@@ -81,15 +71,10 @@ class manageTicketsController extends Controller
         ], 201);
     }
 
-    /**
-     * 3. Menampilkan detail satu tiket.
-     */
-    public function show($id_tiket)
-    {
+    public function show($id_tiket) {
         $user = Auth::user();
         $ptw = $user->pemilikTempatWisata;
 
-        // Mengambil tiket melalui relasi kepemilikan PTW
         $ticket = TiketTempatWisata::where('id_tiket', $id_tiket)
             ->whereHas('tempatWisata', function($query) use ($ptw) {
                 $query->where('id_ptw', $ptw->id_ptw);
@@ -102,11 +87,7 @@ class manageTicketsController extends Controller
         return response()->json(['success' => true, 'data' => $ticket], 200);
     }
 
-    /**
-     * 4. Mengubah data tiket.
-     */
-    public function update(Request $request, $id_tiket)
-    {
+    public function update(Request $request, $id_tiket) {
         $user = Auth::user();
         $ptw = $user->pemilikTempatWisata;
 
@@ -128,11 +109,7 @@ class manageTicketsController extends Controller
         ], 200);
     }
 
-    /**
-     * 5. Menghapus tiket.
-     */
-    public function destroy($id_tiket)
-    {
+    public function destroy($id_tiket) {
         $user = Auth::user();
         $ptw = $user->pemilikTempatWisata;
 
