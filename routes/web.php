@@ -20,9 +20,11 @@ use App\Http\Controllers\Wisatawan\PencarianController;
 use App\Http\Controllers\Wisatawan\PenilaianController;
 use App\Http\Controllers\Wisatawan\PesanTiketController;
 use App\Http\Controllers\Wisatawan\ProfilController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\WisataController;
+// Tambahkan folder \Admin\ setelah Controllers
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\WisataController;
+
 
 //untuk autentikasi - umum
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');

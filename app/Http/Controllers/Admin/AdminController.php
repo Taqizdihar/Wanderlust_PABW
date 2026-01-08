@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+
+namespace App\Http\Controllers\Admin; // Harus ada kata \Admin
+
+use App\Http\Controllers\Controller; // Tambahkan ini biar dia kenal induknya
 use Illuminate\Http\Request;
+// ... sisanya sama
 use App\Models\User;
 use App\Models\Wisata;
 use App\Models\Wisatawan; 
@@ -33,7 +38,8 @@ class AdminController extends Controller
     $chartLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'];
     $chartData = [45, 70, 55, 90, 130, 110];
 
-    return view('admin', compact('page', 'user', 'users', 'wisatas', 'wisata_single', 'chartLabels', 'chartData'));
+    // Tambahkan 'admin.' sebelum nama file karena dia ada di dalam folder admin
+return view('admin.admin', compact('page', 'user', 'users', 'wisatas', 'wisata_single', 'chartLabels', 'chartData'));
 }
     public function storeUser(Request $request)
     {
