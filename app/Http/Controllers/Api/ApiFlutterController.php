@@ -5,9 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
-
-// Import semua model yang diperlukan
 use App\Models\User;
 use App\Models\TempatWisata;
 use App\Models\TiketTempatWisata;
