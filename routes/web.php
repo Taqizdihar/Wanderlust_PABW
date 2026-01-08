@@ -20,18 +20,23 @@ use App\Http\Controllers\Wisatawan\PencarianController;
 use App\Http\Controllers\Wisatawan\PenilaianController;
 use App\Http\Controllers\Wisatawan\PesanTiketController;
 use App\Http\Controllers\Wisatawan\ProfilController;
-// Tambahkan folder \Admin\ setelah Controllers
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\WisataController;
 
+// --- 1. HALAMAN UTAMA (LANDING PAGE) ---
+// Mengubah '/' agar langsung menampilkan Home Wisatawan tanpa redirect ke Admin
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-//untuk autentikasi - umum
-Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
+// --- 2. AUTENTIKASI ---
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login/auth', [LoginController::class, 'authenticate'])->name('login.auth');
-Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
+Route::post('/logout', function () {
+    auth()->logout();
+    return redirect('/');
+})->name('logout');
 
-//untuk pemilik tempat wisata (PTW) - Taqi
+// --- 3. ROLE PEMILIK (PTW) ---
 Route::middleware(['auth', 'cekRole:pemilik'])->group(function () {
     Route::get('/dashboard-ptw', [DashboardPTWController::class, 'index'])->name('dashboard.ptw');
     Route::get('/profile-ptw', [ProfilPTWController::class, 'index'])->name('profil.ptw');
@@ -51,61 +56,33 @@ Route::middleware(['auth', 'cekRole:pemilik'])->group(function () {
     Route::post('/tickets-ptw/{id}/update', [EditTicketPTWController::class, 'update'])->name('tickets.ptw.update');
 });
 
-
-// ROUTE PUBLIK (TIDAK MEMERLUKAN LOGIN / GUEST ACCESS)
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/homeWisatawan', function () {
-    return redirect('/home');
-});
+// --- 4. ROUTE PUBLIK WISATAWAN ---
+Route::get('/home', [HomeController::class, 'index'])->name('home.detail'); // Alias jika butuh url /home
 Route::get('/pencarian', [PencarianController::class, 'index'])->name('pencarian');
 Route::get('/destinasi', [DestinasiController::class, 'index'])->name('destinasi.index'); 
-Route::middleware(['auth:wisatawan'])->group(function () {
-    
-    // Aksi Bookmark (dari AJAX/Fetch)
-    Route::post('/bookmark/toggle/{idTempat}', [BookmarkController::class, 'toggle'])->name('bookmark.toggle'); 
 
-    // Aksi Penilaian (POST untuk menyimpan ulasan dan rating)
+// --- 5. GROUP WISATAWAN (LOGIN REQUIRED) ---
+Route::middleware(['auth:wisatawan'])->group(function () {
+    Route::post('/bookmark/toggle/{idTempat}', [BookmarkController::class, 'toggle'])->name('bookmark.toggle'); 
     Route::post('/penilaian/store', [PenilaianController::class, 'store'])->name('penilaian.store'); 
-    
-    // Pesan Tiket
     Route::get('/pesan-tiket/{idPaket}', [PesanTiketController::class, 'showForm'])->name('pesan.tiket.form'); 
     Route::post('/pesan-tiket/store', [PesanTiketController::class, 'store'])->name('pesan.tiket.store'); 
-
     Route::get('/riwayat-transaksi', [\App\Http\Controllers\PesanTiketController::class, 'riwayat'])->name('transaksi.riwayat');
-
-    // Halaman Profil 
     Route::get('/editProfil', [editProfilController::class,'index'])->name('editProfil');
     Route::get('/profil', [\App\Http\Controllers\ProfilController::class, 'showProfile'])->name('profil');
     Route::get('/edit-profil', [\App\Http\Controllers\editProfilController::class, 'show'])->name('edit-profil');
     Route::post('/update-profil', [\App\Http\Controllers\editProfilController::class, 'update'])->name('update.profil');
-
-    // Route untuk Halaman Favorit/Bookmark (Perlu dibuat)
     Route::get('/favorit', [BookmarkController::class, 'index'])->name('bookmark.index');
-    
-    // Route untuk Halaman Penilaian (Perlu dibuat)
     Route::get('/daftar-penilaian', [PenilaianController::class, 'index'])->name('penilaian.index');
-
 });
 
-// Redirect awal ke admin biar gak bingung
-Route::get('/', function () { return redirect('/admin'); });
-
-// --- GROUP ADMIN ---
+// --- 6. GROUP ADMIN ---
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 Route::patch('/admin/toggle/{id}', [AdminController::class, 'toggleStatus'])->name('admin.toggle');
 Route::delete('/admin/destroy/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
 Route::post('/admin/users/store', [AdminController::class, 'storeUser'])->name('admin.storeUser');
-
-// --- GROUP WISATA (CRUD) ---
 Route::patch('/admin/wisata/approve/{id}', [WisataController::class, 'approve'])->name('wisata.approve');
 Route::patch('/admin/wisata/revisi/{id}', [WisataController::class, 'revisi'])->name('wisata.revisi');
 Route::delete('/admin/wisata/delete/{id}', [WisataController::class, 'destroy'])->name('wisata.delete');
 Route::post('/admin/wisata/simpan', [WisataController::class, 'store'])->name('wisata.store');
-
-// --- GROUP PROFILE ---
 Route::patch('/admin/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-
-Route::post('/logout', function () {
-    auth()->logout();
-    return redirect('/');
-})->name('logout');
