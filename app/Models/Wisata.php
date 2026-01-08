@@ -4,15 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Wisata extends Model
-{
-    protected $table = 'tempat_wisatas';
-    protected $primaryKey = 'id_tempat';
+class Wisata extends Model {
+    protected $table = 'tempat_wisatas'; // Sesuaikan dengan nama tabel di phpMyAdmin kamu
+    protected $primaryKey = 'id_tempat'; // WAJIB ADA INI biar gak error find($id)
 
-    // WAJIB GANTI INI: Tambahkan kolom yang benar-benar ada di DB temanmu
     protected $fillable = [
         'nama_tempat', 
-        'alamat_tempat', // Pastikan ini ada biar gak diblokir Laravel
+        'alamat_tempat', 
         'deskripsi', 
         'status'
     ];
