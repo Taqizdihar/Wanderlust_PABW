@@ -1,29 +1,26 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\EditProfilController;
-use App\Http\Controllers\DashboardPTWController;
-use App\Http\Controllers\PropertyPTWController;
-use App\Http\Controllers\AddPropertyPTWController;
-use App\Http\Controllers\EditPropertyPTWController;
-use App\Http\Controllers\TempatWisataController;
-use App\Http\Controllers\PropertiController;
-use App\Http\Controllers\LokasiController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\VerifikasiDetailController;
-use App\Http\Controllers\ProfilController;
-use App\Http\Controllers\PencarianController;
-use App\Http\Controllers\BookmarkController;   
-use App\Http\Controllers\PenilaianController; 
-use App\Http\Controllers\DestinasiController;  
-use App\Http\Controllers\PesanTiketController; 
-use App\Http\Controllers\ProfilPTWController;
-use App\Http\Controllers\TicketPTWController;
-use App\Http\Controllers\AddTicketPTWController;
-use App\Http\Controllers\EditTicketPTWController;
-
+use App\Http\Controllers\Auth\LoginController; //untuk autentikasi
+use App\Http\Controllers\Admin\DashboardController; //untuk administrator
+use App\Http\Controllers\Admin\TempatWisataController;
+use App\Http\Controllers\Admin\VerifikasiDetailController;
+use App\Http\Controllers\Ptw\AddPropertyPTWController; //untuk pemilik tempat wisata
+use App\Http\Controllers\Ptw\AddTicketPTWController;
+use App\Http\Controllers\Ptw\DashboardPTWController;
+use App\Http\Controllers\Ptw\EditPropertyPTWController;
+use App\Http\Controllers\Ptw\EditTicketPTWController;
+use App\Http\Controllers\Ptw\ProfilPTWController;
+use App\Http\Controllers\Ptw\PropertyPTWController;
+use App\Http\Controllers\Ptw\TicketPTWController;
+use App\Http\Controllers\Wisatawan\BookmarkController; //untuk wisatawan
+use App\Http\Controllers\Wisatawan\DestinasiController;
+use App\Http\Controllers\Wisatawan\editProfilController;
+use App\Http\Controllers\Wisatawan\HomeController;
+use App\Http\Controllers\Wisatawan\PencarianController;
+use App\Http\Controllers\Wisatawan\PenilaianController;
+use App\Http\Controllers\Wisatawan\PesanTiketController;
+use App\Http\Controllers\Wisatawan\ProfilController;
 
 //untuk autentikasi - umum
 Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
