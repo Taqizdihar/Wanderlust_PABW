@@ -30,21 +30,22 @@ class WisataController extends Controller
         $wisata = Wisata::findOrFail($id);
         $wisata->status = 'approved'; 
         $wisata->save();
-        return redirect()->route('wisata.index')->with('success', 'Wisata "' . $wisata->nama_wisata . '" telah disetujui!');
+        // Redirect balik ke dashboard dengan parameter page=wisata agar tampilan tidak berubah
+        return redirect()->route('admin.index', ['page' => 'wisata'])->with('success', 'Wisata "' . $wisata->nama_wisata . '" telah disetujui!');
     }
 
     public function revisi($id) {
         $wisata = Wisata::findOrFail($id);
         $wisata->status = 'pending'; 
         $wisata->save();
-        return redirect()->route('wisata.index')->with('success', 'Wisata dikembalikan (Status: Pending)!');
+        return redirect()->route('admin.index', ['page' => 'wisata'])->with('success', 'Wisata dikembalikan (Status: Pending)!');
     }
 
     public function destroy($id) {
         $wisata = Wisata::findOrFail($id);
         $nama = $wisata->nama_wisata;
         $wisata->delete(); 
-        return redirect()->route('wisata.index')->with('success', 'Wisata "' . $nama . '" berhasil dihapus!');
+        return redirect()->route('admin.index', ['page' => 'wisata'])->with('success', 'Wisata "' . $nama . '" berhasil dihapus!');
     }
 
     public function create() {
@@ -68,6 +69,6 @@ class WisataController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->route('wisata.index')->with('success', 'Wisata baru berhasil ditambahkan!');
+        return redirect()->route('admin.index', ['page' => 'wisata'])->with('success', 'Wisata baru berhasil ditambahkan!');
     }
 }

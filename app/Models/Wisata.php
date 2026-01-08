@@ -1,12 +1,18 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Wisata extends Model
 {
-    // Sesuaikan: 'wisatas' atau 'wisata'? 
-    protected $table = 'wisatas'; 
+    // Ini rahasianya beb, biar dia nembak ke tabel teman kelompokmu
+    protected $table = 'tempat_wisatas'; 
 
-    protected $fillable = ['nama_wisata', 'pemilik', 'deskripsi', 'status'];
+    protected $fillable = [
+        'nama_wisata', 
+        'pemilik', 
+        'deskripsi', 
+        'status'
+    ];
 }

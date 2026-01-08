@@ -1,7 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\LoginController; //untuk autentikasi
-use App\Http\Controllers\Admin\DashboardController; //untuk administrator
+use App\Http\Controllers\Auth\LoginController; 
+use App\Http\Controllers\Admin\DashboardController; 
 use App\Http\Controllers\Admin\TempatWisataController;
 use App\Http\Controllers\Admin\VerifikasiDetailController;
 use App\Http\Controllers\Ptw\AddPropertyPTWController; //untuk pemilik tempat wisata

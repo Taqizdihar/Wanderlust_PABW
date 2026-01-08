@@ -17,7 +17,7 @@ class AdminController extends Controller
         $user = auth()->user() ?? User::first(); 
         
         $users = Wisatawan::all(); 
-        $wisatas = Wisata::all();
+    $wisatas = Wisata::all();
 
         $wisata_single = null;
         if($page == 'review_detail' && $request->has('id')) {

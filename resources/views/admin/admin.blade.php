@@ -3,311 +3,336 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Travel Admin - Wanderlust</title>
+    <title>Wanderlust - Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-gray-50 flex font-sans">
-
-    {{-- SIDEBAR --}}
-    <div class="w-72 bg-[#2D6A76] min-h-screen text-white p-6 shadow-xl fixed">
-        <div class="flex items-center gap-3 mb-10">
-            <div class="bg-blue-400 p-2 rounded-lg shadow-lg">
-                <i class="fas fa-box text-xl text-white"></i>
-            </div>
-            <h1 class="text-2xl font-bold tracking-tight">Wanderlust</h1>
-        </div>
-
-        <div class="text-center mb-10">
-            <img src="https://i.pravatar.cc/150?u=riska" class="w-20 h-20 rounded-full mx-auto border-4 border-[#3a828e] shadow-md object-cover">
-            <p class="mt-3 font-semibold text-lg leading-none">Halo, Admin</p>
-            <p class="text-[10px] text-gray-300 mt-2 uppercase tracking-[0.2em] font-bold">Riska Dea Bakri</p>
-        </div>
-
-        <nav class="space-y-2">
-            <a href="{{ route('admin.index', ['page' => 'dashboard']) }}" 
-               class="flex items-center gap-4 p-3 rounded-xl transition {{ $page == 'dashboard' ? 'bg-[#1e4b54] shadow-inner' : 'hover:bg-[#3a828e]' }}">
-                <i class="fas fa-th-large w-5 text-center"></i> <span class="font-medium">Dashboard</span>
-            </a>
-            <a href="{{ route('admin.index', ['page' => 'users']) }}" 
-               class="flex items-center gap-4 p-3 rounded-xl transition {{ $page == 'users' || $page == 'tambah_user' ? 'bg-[#1e4b54] shadow-inner' : 'hover:bg-[#3a828e]' }}">
-                <i class="fas fa-users w-5 text-center"></i> <span class="font-medium">Kelola User</span>
-            </a>
-            <a href="{{ route('wisata.index') }}" class="flex items-center gap-4 p-3 rounded-xl transition {{ $page == 'wisata' || $page == 'review_detail' || $page == 'tambah_wisata' ? 'bg-[#1e4b54] shadow-inner' : 'hover:bg-[#3a828e]' }}">
-                <i class="fas fa-map-marked-alt w-5 text-center"></i> <span class="font-medium">Kelola Wisata</span>
-            </a>
-             <a href="#" class="flex items-center gap-4 p-3 rounded-xl hover:bg-[#3a828e] transition">
-                <i class="fas fa-coins w-5 text-center"></i> <span class="font-medium">Kelola Keuangan</span>
-            </a>
-        </nav>
-    </div>
-
-    {{-- MAIN CONTENT AREA --}}
-    <div class="flex-1 ml-72 flex flex-col">
-        <header class="bg-[#2D6A76] text-white p-4 px-10 flex justify-between items-center sticky top-0 z-10 shadow-md">
-            <h2 class="text-xl font-semibold italic">
-                @if($page == 'dashboard') Dashboard Utama @elseif($page == 'users') Kelola User @elseif($page == 'tambah_user') Tambah Wisatawan @elseif($page == 'wisata') Kelola Wisata @elseif($page == 'tambah_wisata') Input Wisata Baru @elseif($page == 'review_detail') Detail Review Wisata @else Profil Admin @endif
-            </h2>
-            <div class="flex items-center gap-6">
-                <div class="relative">
-                    <input type="text" placeholder="Cari..." class="rounded-full bg-[#3a828e] border-none text-white placeholder-gray-200 px-4 py-1.5 text-sm w-64 focus:ring-2 focus:ring-white">
-                    <i class="fas fa-search absolute right-4 top-2.5 text-gray-200 text-xs"></i>
-                </div>
-                <i class="fas fa-bell text-lg cursor-pointer hover:text-gray-200"></i>
-                <a href="{{ route('profile.edit') }}" class="hover:text-gray-200 transition">
-                    <i class="fas fa-user-circle text-2xl"></i>
-                </a>
-            </div>
-        </header>
-
-        <main class="p-8">
-            @if(session('success'))
-                <div class="bg-green-500 text-white p-4 rounded-xl mb-6 shadow-md flex items-center gap-3 animate-bounce">
-                    <i class="fas fa-check-circle"></i> {{ session('success') }}
-                </div>
-            @endif
-
-            {{-- PAGE DASHBOARD --}}
-            @if($page == 'dashboard')
-                <h1 class="text-2xl font-bold text-gray-800 mb-8 tracking-tight">Selamat Datang, Admin</h1>
-                <div class="grid grid-cols-4 gap-6 mb-10">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border-b-8 border-blue-400">
-                        <p class="text-gray-400 text-sm font-medium mb-1 uppercase tracking-tighter">Total Destinasi</p>
-                        <h3 class="text-4xl font-black text-gray-700">12</h3>
+<body class="bg-gray-50 font-sans">
+    <div class="flex min-h-screen">
+        <aside class="w-64 bg-indigo-900 text-white flex-shrink-0">
+            <div class="p-6">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="bg-white p-2 rounded-lg">
+                        <i class="fas fa-map-marked-alt text-indigo-900 text-xl"></i>
                     </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border-b-8 border-green-400">
-                        <p class="text-gray-400 text-sm font-medium mb-1 uppercase tracking-tighter">Pengguna Aktif</p>
-                        <h3 class="text-4xl font-black text-gray-700">{{ count($users) }}</h3>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border-b-8 border-yellow-400">
-                        <p class="text-gray-400 text-sm font-medium mb-1 uppercase tracking-tighter">Transaksi</p>
-                        <h3 class="text-4xl font-black text-gray-700">67</h3>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border-b-8 border-red-400">
-                        <p class="text-gray-400 text-sm font-medium mb-1 uppercase tracking-tighter">Estimasi</p>
-                        <h3 class="text-2xl font-black text-gray-700">Rp 12.5M</h3>
-                    </div>
+                    <span class="text-xl font-bold tracking-wider">WANDERLUST</span>
                 </div>
-
-                {{-- DIAGRAM STATISTIK --}}
-                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 mb-10">
-                    <h4 class="text-lg font-bold text-gray-700 mb-6 italic"><i class="fas fa-users-cog mr-2 text-teal-600"></i> Statistik Member</h4>
-                    <canvas id="comparisonChart" height="80"></canvas>
-                </div>
-
-            {{-- PAGE KELOLA USER --}}
-            @elseif($page == 'users')
-                <div class="flex justify-between items-center mb-8">
-                    <h1 class="text-2xl font-bold text-gray-800 tracking-tight">Detail List Wisatawan</h1>
-                    <a href="{{ route('admin.index', ['page' => 'tambah_user']) }}" class="bg-[#2D6A76] text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md hover:bg-[#1e4b54] transition">
-                        <i class="fas fa-user-plus mr-2"></i> Tambah Wisatawan
+                
+                <nav class="space-y-1">
+                    <a href="?page=dashboard" class="flex items-center gap-3 px-4 py-3 rounded-lg transition {{ $page == 'dashboard' ? 'bg-indigo-800' : 'hover:bg-indigo-800/50' }}">
+                        <i class="fas fa-chart-line w-5"></i> Dashboard
                     </a>
-                </div>
-                <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
-                    <table class="w-full text-left">
-                        <thead class="bg-gray-50 border-b border-gray-100 text-gray-500 text-xs uppercase font-bold tracking-wider">
-                            <tr>
-                                <th class="px-6 py-4">ID</th>
-                                <th class="px-6 py-4">Nama Lengkap</th>
-                                <th class="px-6 py-4 text-center">Status</th>
-                                <th class="px-6 py-4 text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            @foreach($users as $user)
-                            <tr class="hover:bg-gray-50 transition">
-                                <td class="px-6 py-4 text-sm font-medium text-gray-500">#00{{ $user->id ?? $user['id'] }}</td>
-                                <td class="px-6 py-4 text-gray-700">
-                                    <p class="font-semibold">{{ $user->nama ?? $user['nama'] }}</p>
-                                    <p class="text-[10px] text-gray-400 font-bold uppercase">{{ $user->email ?? $user['email'] }}</p>
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <span class="px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase {{ ($user->status ?? $user['status']) == 'AKTIF' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600' }}">
-                                        {{ $user->status ?? $user['status'] }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 flex justify-center gap-2">
-                                    <form action="{{ route('admin.toggle', $user->id ?? $user['id']) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="bg-yellow-50 text-yellow-600 border border-yellow-200 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-yellow-500 hover:text-white transition shadow-sm">Status</button>
-                                    </form>
-                                    <form action="{{ route('admin.delete', $user->id ?? $user['id']) }}" method="POST" onsubmit="return confirm('Hapus user ini?')">
-                                        @csrf
-                                        <button type="submit" class="bg-red-50 text-red-600 border border-red-200 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-red-600 hover:text-white transition shadow-sm">Hapus</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                    <a href="?page=users" class="flex items-center gap-3 px-4 py-3 rounded-lg transition {{ $page == 'users' ? 'bg-indigo-800' : 'hover:bg-indigo-800/50' }}">
+                        <i class="fas fa-users w-5"></i> Wisatawan
+                    </a>
+                    <a href="?page=wisata" class="flex items-center gap-3 px-4 py-3 rounded-lg transition {{ ($page == 'wisata' || $page == 'review_detail') ? 'bg-indigo-800' : 'hover:bg-indigo-800/50' }}">
+                        <i class="fas fa-map-pin w-5"></i> Destinasi Wisata
+                    </a>
+                </nav>
+            </div>
 
-            {{-- PAGE TAMBAH USER (MANUAL) --}}
-            @elseif($page == 'tambah_user')
-                <div class="max-w-xl mx-auto bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="bg-[#2D6A76] p-6 text-white text-center">
-                        <h2 class="text-xl font-bold uppercase tracking-widest italic">Tambah Wisatawan Baru</h2>
+            <div class="absolute bottom-0 w-64 p-6 bg-indigo-950">
+                <div class="flex items-center gap-3">
+                    <img src="{{ $user->foto ?? 'https://ui-avatars.com/api/?name=' . ($user->name ?? 'Admin') }}" class="w-10 h-10 rounded-full border-2 border-indigo-400">
+                    <div class="overflow-hidden">
+                        <p class="text-sm font-semibold truncate">{{ $user->name ?? 'Admin Riska' }}</p>
+                        <a href="?page=profile" class="text-xs text-indigo-300 hover:text-white transition">Edit Profil</a>
                     </div>
-                    <form action="{{ route('admin.user.store') }}" method="POST" class="p-8 space-y-5">
+                </div>
+            </div>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto">
+            <header class="bg-white shadow-sm px-8 py-4 flex justify-between items-center">
+                <h2 class="text-xl font-bold text-gray-800">
+                    @if($page == 'dashboard') Dashboard Overview
+                    @elseif($page == 'users') Manajemen Wisatawan
+                    @elseif($page == 'wisata') Review Destinasi Wisata
+                    @elseif($page == 'review_detail') Detail Review Wisata
+                    @elseif($page == 'profile') Pengaturan Profil
+                    @endif
+                </h2>
+                <div class="flex items-center gap-4">
+                    <button class="relative p-2 text-gray-400 hover:text-indigo-600">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                    </button>
+                    <form action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <div>
-                            <label class="block text-xs font-black text-gray-400 uppercase mb-2">Nama Lengkap</label>
-                            <input type="text" name="nama" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2D6A76] outline-none font-bold text-gray-700" placeholder="Contoh: Budi Santoso" required>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-black text-gray-400 uppercase mb-2">Alamat Email</label>
-                            <input type="email" name="email" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2D6A76] outline-none font-bold text-gray-700" placeholder="budi@email.com" required>
-                        </div>
-                        <p class="text-[10px] text-gray-400 italic text-center">*Password otomatis diset ke: password123</p>
-                        <button type="submit" class="w-full bg-[#2D6A76] text-white py-4 rounded-2xl font-black text-xs shadow-lg hover:bg-[#1e4b54] transition uppercase tracking-widest">
-                            SIMPAN WISATAWAN KE DATABASE
+                        <button type="submit" class="text-gray-600 hover:text-red-600 font-medium px-4 py-2 rounded-lg hover:bg-red-50 transition">
+                            Keluar <i class="fas fa-sign-out-alt ml-1"></i>
                         </button>
                     </form>
                 </div>
+            </header>
 
-            {{-- PAGE KELOLA WISATA --}}
-            @elseif($page == 'wisata')
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Kelola Persetujuan Wisata</h2>
-                    <a href="{{ route('wisata.create') }}" class="bg-[#2D6A76] text-white px-5 py-2.5 rounded-xl text-xs font-black shadow-lg hover:bg-[#1e4b54] transition uppercase tracking-widest">
-                        <i class="fas fa-plus mr-2"></i> Tambah Wisata
-                    </a>
+            <div class="p-8">
+                @if(session('success'))
+                <div class="mb-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle mr-3"></i>
+                        {{ session('success') }}
+                    </div>
+                    <button onclick="this.parentElement.remove()" class="text-green-700">&times;</button>
                 </div>
-                <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
-                    <table class="w-full text-left">
-                        <thead class="bg-slate-50 border-b text-xs uppercase font-bold text-slate-500 tracking-wider">
-                            <tr>
-                                <th class="p-6">Nama Wisata</th>
-                                <th class="p-6">Pemilik</th>
-                                <th class="p-6 text-center">Status</th>
-                                <th class="p-6 text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            @foreach($wisatas as $w)
-                            <tr class="hover:bg-gray-50 transition">
-                                <td class="p-6 font-bold text-gray-800">{{ $w->nama_wisata }}</td>
-                                <td class="p-6 text-slate-600 font-medium">{{ $w->pemilik }}</td>
-                                <td class="p-6 text-center">
-                                    <span class="px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase {{ $w->status == 'pending' ? 'bg-orange-100 text-orange-600' : ($w->status == 'revisi' ? 'bg-yellow-100 text-yellow-600' : 'bg-green-100 text-green-600') }}">
+                @endif
+
+                @if($page == 'dashboard')
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm text-gray-500 mb-1">Total Wisatawan</p>
+                                    <h3 class="text-2xl font-bold">{{ count($users) }}</h3>
+                                </div>
+                                <div class="bg-blue-50 p-3 rounded-lg text-blue-600">
+                                    <i class="fas fa-users text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm text-gray-500 mb-1">Destinasi Aktif</p>
+                                    <h3 class="text-2xl font-bold">{{ $wisatas->where('status', 'approved')->count() }}</h3>
+                                </div>
+                                <div class="bg-green-50 p-3 rounded-lg text-green-600">
+                                    <i class="fas fa-map-marked-alt text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm text-gray-500 mb-1">Menunggu Review</p>
+                                    <h3 class="text-2xl font-bold">{{ $wisatas->where('status', 'pending')->count() }}</h3>
+                                </div>
+                                <div class="bg-orange-50 p-3 rounded-lg text-orange-600">
+                                    <i class="fas fa-clock text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <h3 class="font-bold text-gray-800 mb-4">Tren Kunjungan Wisatawan</h3>
+                        <canvas id="visitorChart" height="100"></canvas>
+                    </div>
+
+                @elseif($page == 'users')
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                        <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                            <h3 class="font-bold text-gray-800">Daftar Wisatawan Terdaftar</h3>
+                            <button onclick="document.getElementById('modalUser').classList.remove('hidden')" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
+                                <i class="fas fa-plus mr-2"></i> Tambah Wisatawan
+                            </button>
+                        </div>
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50 text-gray-600 text-sm uppercase">
+                                <tr>
+                                    <th class="px-6 py-4">ID</th>
+                                    <th class="px-6 py-4">Nama</th>
+                                    <th class="px-6 py-4">Email</th>
+                                    <th class="px-6 py-4">Status</th>
+                                    <th class="px-6 py-4">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100 text-gray-700">
+                                @forelse($users as $u)
+                                <tr class="hover:bg-gray-50 transition">
+                                    <td class="px-6 py-4 font-medium">#{{ $u->id }}</td>
+                                    <td class="px-6 py-4">{{ $u->nama }}</td>
+                                    <td class="px-6 py-4">{{ $u->email }}</td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $u->status == 'AKTIF' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                            {{ $u->status }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex gap-2">
+                                            <form action="{{ route('admin.toggle', $u->id) }}" method="POST">
+                                                @csrf @method('PATCH')
+                                                <button class="p-2 text-indigo-600 hover:bg-indigo-50 rounded" title="Ubah Status">
+                                                    <i class="fas fa-sync-alt"></i>
+                                                </button>
+                                            </form>
+                                            <form action="{{ route('admin.destroy', $u->id) }}" method="POST" onsubmit="return confirm('Yakin mau hapus ini?')">
+                                                @csrf @method('DELETE')
+                                                <button class="p-2 text-red-600 hover:bg-red-50 rounded">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr><td colspan="5" class="p-6 text-center text-gray-500">Belum ada data wisatawan.</td></tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                @elseif($page == 'wisata')
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        @forelse($wisatas as $w)
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition">
+                            <div class="h-48 bg-gray-200 relative">
+                                <img src="https://source.unsplash.com/random/400x300?nature,travel&sig={{ $w->id }}" class="w-full h-full object-cover">
+                                <div class="absolute top-4 right-4">
+                                    <span class="px-3 py-1 rounded-full text-xs font-bold uppercase shadow-sm
+                                        {{ $w->status == 'approved' ? 'bg-green-500 text-white' : ($w->status == 'pending' ? 'bg-orange-500 text-white' : 'bg-gray-500 text-white') }}">
                                         {{ $w->status }}
                                     </span>
-                                </td>
-                                <td class="p-6 flex justify-center gap-3">
-                                    <a href="{{ route('wisata.review', $w->id) }}" class="bg-blue-50 text-blue-600 border border-blue-200 px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-600 hover:text-white transition shadow-sm">
-                                        <i class="fas fa-eye mr-1"></i> Review
-                                    </a>
-                                    <form action="{{ route('wisata.delete', $w->id) }}" method="POST" onsubmit="return confirm('Hapus wisata ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="bg-red-50 text-red-600 border border-red-200 px-4 py-2 rounded-xl text-xs font-bold hover:bg-red-600 hover:text-white transition shadow-sm">
-                                            <i class="fas fa-trash mr-1"></i> Delete
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h4 class="font-bold text-lg text-gray-800 mb-1">{{ $w->nama_wisata }}</h4>
+                                <p class="text-sm text-gray-500 mb-4 flex items-center">
+                                    <i class="fas fa-user-circle mr-2"></i> Pemilik: {{ $w->pemilik }}
+                                </p>
+                                <a href="?page=review_detail&id={{ $w->id }}" class="block text-center bg-gray-100 text-gray-700 py-2 rounded-lg font-semibold hover:bg-indigo-600 hover:text-white transition">
+                                    Lihat Detail & Review
+                                </a>
+                            </div>
+                        </div>
+                        @empty
+                        <div class="col-span-full text-center py-12 text-gray-500">Belum ada destinasi wisata yang didaftarkan.</div>
+                        @endforelse
+                    </div>
+
+                @elseif($page == 'review_detail' && isset($wisata_single))
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                        <div class="md:flex">
+                            <div class="md:w-1/2">
+                                <img src="https://source.unsplash.com/random/800x600?nature,travel&sig={{ $wisata_single->id }}" class="w-full h-full object-cover">
+                            </div>
+                            <div class="md:w-1/2 p-10">
+                                <div class="flex items-center gap-2 mb-4">
+                                    <span class="bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full uppercase">Review Destinasi</span>
+                                    <span class="text-gray-400">•</span>
+                                    <span class="text-gray-500 text-sm">ID: #{{ $wisata_single->id }}</span>
+                                </div>
+                                <h3 class="text-3xl font-bold text-gray-800 mb-4">{{ $wisata_single->nama_wisata }}</h3>
+                                <div class="space-y-4 mb-8">
+                                    <div>
+                                        <p class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Pemilik</p>
+                                        <p class="text-gray-700 font-medium">{{ $wisata_single->pemilik }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Deskripsi Destinasi</p>
+                                        <p class="text-gray-600 leading-relaxed">{{ $wisata_single->deskripsi }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Status Saat Ini</p>
+                                        <span class="inline-block mt-1 px-4 py-1 rounded-full text-sm font-bold uppercase {{ $wisata_single->status == 'approved' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700' }}">
+                                            {{ $wisata_single->status }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4 border-t pt-8">
+                                    <form action="{{ route('wisata.approve', $wisata_single->id) }}" method="POST" class="flex-1">
+                                        @csrf @method('PATCH')
+                                        <button class="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 shadow-lg shadow-green-200 transition">
+                                            <i class="fas fa-check-circle mr-2"></i> Approve Sekarang
                                         </button>
                                     </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                                    <form action="{{ route('wisata.revisi', $wisata_single->id) }}" method="POST" class="flex-1">
+                                        @csrf @method('PATCH')
+                                        <button class="w-full bg-white border-2 border-orange-500 text-orange-600 py-3 rounded-xl font-bold hover:bg-orange-50 transition">
+                                            <i class="fas fa-undo mr-2"></i> Minta Revisi
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            {{-- PAGE TAMBAH WISATA --}}
-            @elseif($page == 'tambah_wisata')
-                <div class="max-w-2xl mx-auto bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="bg-[#2D6A76] p-6 text-white text-center">
-                        <h2 class="text-xl font-bold uppercase tracking-widest italic">Input Wisata Baru</h2>
-                    </div>
-                    <form action="{{ route('wisata.store') }}" method="POST" class="p-8 space-y-5">
-                        @csrf
-                        <div>
-                            <label class="block text-xs font-black text-gray-400 uppercase mb-2 tracking-widest">Nama Wisata</label>
-                            <input type="text" name="nama_wisata" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2D6A76] outline-none font-bold text-gray-700" placeholder="Contoh: Pantai Pangandaran" required>
+                @elseif($page == 'profile')
+                    <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                        <div class="text-center mb-8">
+                            <div class="relative inline-block">
+                                <img src="{{ $user->foto ?? 'https://ui-avatars.com/api/?name=' . ($user->name ?? 'Admin') }}" class="w-32 h-32 rounded-full border-4 border-indigo-50 shadow-md mx-auto mb-4 object-cover">
+                                <button class="absolute bottom-4 right-0 bg-white p-2 rounded-full shadow-md border text-indigo-600 hover:text-indigo-800">
+                                    <i class="fas fa-camera"></i>
+                                </button>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800">{{ $user->name ?? 'Admin Riska' }}</h3>
+                            <p class="text-gray-500 italic">"{{ $user->bio ?? 'Belum ada bio.' }}"</p>
                         </div>
-                        <div>
-                            <label class="block text-xs font-black text-gray-400 uppercase mb-2 tracking-widest">Nama Pemilik</label>
-                            <input type="text" name="pemilik" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2D6A76] outline-none font-bold text-gray-700" placeholder="Riska Dea" required>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-black text-gray-400 uppercase mb-2 tracking-widest">Deskripsi Wisata</label>
-                            <textarea name="deskripsi" rows="5" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2D6A76] outline-none font-medium text-gray-600 leading-relaxed" placeholder="Tuliskan deskripsi lengkap di sini..." required></textarea>
-                        </div>
-                        <button type="submit" class="w-full bg-[#2D6A76] text-white py-4 rounded-2xl font-black text-xs shadow-lg hover:bg-[#1e4b54] transition uppercase tracking-[0.3em]">
-                            SIMPAN DATA KE DATABASE
-                        </button>
-                    </form>
-                </div>
 
-            {{-- PAGE DETAIL REVIEW --}}
-            @elseif($page == 'review_detail')
-                <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="bg-[#2D6A76] p-8 text-white flex justify-between items-center">
-                        <div>
-                            <p class="text-[10px] uppercase tracking-[0.3em] font-bold opacity-70 mb-1">Moderasi Wisata</p>
-                            <h2 class="text-2xl font-bold italic">{{ $wisata->nama_wisata }}</h2>
-                        </div>
-                        <a href="{{ route('wisata.index') }}" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl text-xs font-bold transition">
-                            <i class="fas fa-arrow-left mr-2"></i> KEMBALI
-                        </a>
+                        <form action="{{ route('profile.update') }}" method="POST" class="space-y-6">
+                            @csrf @method('PATCH')
+                            <div class="grid grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Lengkap</label>
+                                    <input type="text" name="name" value="{{ $user->name }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Alamat Email</label>
+                                    <input type="email" name="email" value="{{ $user->email }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Bio Singkat</label>
+                                <textarea name="bio" rows="3" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">{{ $user->bio }}</textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition">
+                                Simpan Perubahan Profil
+                            </button>
+                        </form>
                     </div>
-                    <div class="p-10 grid grid-cols-2 gap-10">
-                        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=500" class="rounded-3xl w-full h-80 object-cover shadow-2xl border-8 border-gray-50">
-                        <div class="space-y-6">
-                            <div>
-                                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Nama Wisata</label>
-                                <p class="text-xl font-bold text-gray-700 leading-none">{{ $wisata->nama_wisata }}</p>
-                            </div>
-                            <div>
-                                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Pemilik Wisata</label>
-                                <p class="text-gray-700 font-medium">{{ $wisata->pemilik }}</p>
-                            </div>
-                            <div>
-                                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Deskripsi Lengkap</label>
-                                <p class="text-gray-600 text-sm leading-relaxed text-justify">{!! nl2br(e($wisata->deskripsi)) !!}</p>
-                            </div>
-                            <div class="flex gap-4 pt-4">
-                                <form action="{{ route('wisata.approve', $wisata->id) }}" method="POST" class="flex-1">
-                                    @csrf
-                                    <button class="w-full bg-emerald-500 text-white py-4 rounded-2xl font-black text-xs shadow-lg hover:bg-emerald-600 transition uppercase tracking-widest">Approve</button>
-                                </form>
-                                <form action="{{ route('wisata.revisi', $wisata->id) }}" method="POST" class="flex-1">
-                                    @csrf
-                                    <button class="w-full bg-yellow-500 text-white py-4 rounded-2xl font-black text-xs shadow-lg hover:bg-yellow-600 transition uppercase tracking-widest">Revisi</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endif
+                @endif
+            </div>
         </main>
     </div>
 
-    {{-- SCRIPT DIAGRAM --}}
+    <div id="modalUser" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold">Tambah Wisatawan Baru</h3>
+                <button onclick="document.getElementById('modalUser').classList.add('hidden')" class="text-gray-400 hover:text-gray-600">&times;</button>
+            </div>
+            <form action="{{ route('admin.storeUser') }}" method="POST" class="space-y-4">
+                @csrf
+                <div>
+                    <label class="block text-sm font-medium mb-1">Nama Wisatawan</label>
+                    <input type="text" name="nama" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Email</label>
+                    <input type="email" name="email" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition mt-4">
+                    Simpan Data
+                </button>
+            </form>
+        </div>
+    </div>
+
+    @if($page == 'dashboard')
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const ctx = document.getElementById('comparisonChart');
-            if(ctx) {
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                        datasets: [{ 
-                            label: 'Peningkatan Wisatawan', 
-                            data: [150, 200, 180, 245, 210, 260], 
-                            borderColor: '#2D6A76', 
-                            backgroundColor: 'rgba(45, 106, 118, 0.1)',
-                            fill: true, 
-                            tension: 0.4 
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: { legend: { display: false } },
-                        scales: { y: { beginAtZero: true } }
-                    }
-                });
+        const ctx = document.getElementById('visitorChart');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {!! json_encode($chartLabels) !!},
+                datasets: [{
+                    label: 'Pengunjung',
+                    data: {!! json_encode($chartData) !!},
+                    borderColor: 'rgb(79, 70, 229)',
+                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, grid: { display: false } }, x: { grid: { display: false } } }
             }
         });
     </script>
+    @endif
 </body>
 </html>
