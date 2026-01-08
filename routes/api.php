@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Ptw\profilPTWController;
 //Admin
 use App\Http\Controllers\Api\admin\WisatawanApiController;
 use App\Http\Controllers\Api\admin\WisataApiController;
+use App\Http\Controllers\Api\admin\ProfileApiController;
 
 
 Route::post('/register', [AuthApiController::class, 'register']);
@@ -33,21 +34,22 @@ Route::middleware('auth:sanctum')->prefix('ptw')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthApiController::class, 'logout']);
 });
-
-//admin
 // --- ROUTE UNTUK WISATAWAN ---
 Route::get('users', [WisatawanApiController::class, 'index']);
 Route::post('users', [WisatawanApiController::class, 'store']);
-Route::put('users/{id}', [WisatawanApiController::class, 'update']); // <--- JALAN UNTUK EDIT
+Route::put('users/{id}', [WisatawanApiController::class, 'update']); 
 Route::patch('users/{id}/status', [WisatawanApiController::class, 'updateStatus']);
 Route::delete('users/{id}', [WisatawanApiController::class, 'destroy']);
 
 // --- ROUTE UNTUK TEMPAT WISATA ---
 Route::get('wisata', [WisataApiController::class, 'index']);
 Route::post('wisata', [WisataApiController::class, 'store']);
-Route::put('wisata/{id}', [WisataApiController::class, 'update']); // <--- JALAN UNTUK EDIT (BIAR GAK ERROR PUT)
+Route::put('wisata/{id}', [WisataApiController::class, 'update']); 
 Route::patch('wisata/{id}/approve', [WisataApiController::class, 'approve']);
 Route::delete('wisata/{id}', [WisataApiController::class, 'destroy']);
-Route::put('wisata/{id}', [WisataApiController::class, 'update']);
-// Pastikan ada baris ini beb:
-Route::put('wisata/{id}', [WisataApiController::class, 'update']); // <--- INI WAJIB ADA
+
+// --- ROUTE UNTUK PROFILE USER ---
+Route::get('profile', [ProfileApiController::class, 'index']);      
+Route::post('profile', [ProfileApiController::class, 'store']);    
+Route::put('profile/{id}', [ProfileApiController::class, 'update']); 
+Route::delete('profile/{id}', [ProfileApiController::class, 'destroy']);
