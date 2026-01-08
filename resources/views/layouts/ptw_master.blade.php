@@ -9,11 +9,11 @@
 </head>
 <body>
 
-    @include('partials.sidebar_ptw')
+    @include('partials.ptw.sidebar_ptw')
 
     <div class="main-content">
         
-        @include('partials.header_ptw')
+        @include('partials.ptw.header_ptw')
 
         <div class="content-body">
             @yield('content')
