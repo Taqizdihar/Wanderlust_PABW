@@ -12,15 +12,17 @@
         </a>
     </div>
     
-    <div class="action-bar" style="justify-content: flex-start;">
-        <a href="{{ route('tickets.ptw.create', $property->id_wisata) }}" class="btn-add-new">
+    <div class="action-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        
+        <a href="{{ route('tickets.ptw.create', $property->id_wisata) }}" class="btn-add-new" style="margin: 0;">
             + Add New Ticket
         </a>
+
+        <form action="{{ route('properties.ptw.tickets', $property->id_wisata) }}" method="GET" class="search-filter-form" style="margin: 0;">
+            <input type="text" name="search" class="search-input" placeholder="Search Ticket..." value="{{ request('search') }}" style="width: 250px; padding: 8px 15px; border-radius: 20px; border: 1px solid #ccc;">
+        </form>
+
     </div>
-	
-	<form action="{{ route('properties.ptw.tickets', $property->id_wisata) }}" method="GET" class="search-filter-form">>
-		<input type="text" name="search" class="search-input" placeholder="Search Ticket..." value="{{ request('search') }}">
-	</form>
 
     <div class="property-list">
         
