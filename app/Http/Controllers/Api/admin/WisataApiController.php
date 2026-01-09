@@ -8,15 +8,12 @@ use Illuminate\Http\Request;
 
 class WisataApiController extends Controller {
     
-    // 1. LIHAT SEMUA WISATA
     public function index() {
         return response()->json([
             'success' => true,
             'data'    => Wisata::all()
         ], 200);
     }
-
-    // 2. TAMBAH / AJUKAN WISATA
     public function store(Request $request) {
         $wisata = Wisata::create([
             'id_ptw'        => $request->id_ptw ?? 1, 
@@ -32,9 +29,8 @@ class WisataApiController extends Controller {
             'data'    => $wisata
         ], 201);
     }
-// 3. SETUJUI / GANTI STATUS WISATA (Sempurna & Fleksibel)
+
     public function approve(Request $request, $id) {
-        // Cari data menggunakan id_tempat sesuai database
         $wisata = Wisata::where('id_tempat', $id)->first();
 
         if (!$wisata) {
@@ -44,7 +40,6 @@ class WisataApiController extends Controller {
             ], 404);
         }
 
-        // Ambil dari Postman, kalau kosong otomatis jadi 'approved'
         $wisata->status = $request->status ?? 'approved';
         $wisata->save();
 
@@ -54,7 +49,6 @@ class WisataApiController extends Controller {
             'data'    => $wisata
         ], 200);
     }
-// Fungsi ganti status pakai kata-kata (aktif/nonaktif)
     public function updateStatus(Request $request, $id) {
         $wisata = Wisata::where('id_tempat', $id)->first();
 
@@ -65,7 +59,7 @@ class WisataApiController extends Controller {
             ], 404);
         }
 
-        // Ini kuncinya beb, dia bakal ambil tulisan apa pun yang kamu ketik di Postman
+        
         $wisata->update([
             'status' => $request->status 
         ]);
@@ -76,7 +70,7 @@ class WisataApiController extends Controller {
             'data'    => $wisata
         ], 200);
     }
-    // 4. HAPUS WISATA
+    // untuk  HAPUS WISATA
     public function destroy($id) {
         $wisata = Wisata::find($id);
         if (!$wisata) return response()->json(['message' => 'Data tidak ditemukan'], 404);
@@ -85,10 +79,7 @@ class WisataApiController extends Controller {
         return response()->json(['success' => true, 'message' => 'Wisata berhasil dihapus'], 200);
     }
 
-    // 5. EDIT WISATA (Ini yang baru ya beb!)
-// Tambahkan ini di dalam class WisataApiController
 public function update(Request $request, $id) {
-    // Cari data menggunakan primary key yang spesifik
     $wisata = Wisata::where('id_tempat', $id)->first();
 
     if (!$wisata) {

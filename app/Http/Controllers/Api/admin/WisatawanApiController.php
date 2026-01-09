@@ -9,15 +9,12 @@ use Illuminate\Support\Facades\Hash;
 
 class WisatawanApiController extends Controller 
 {
-    // 1. LIHAT SEMUA USER
     public function index() {
         return response()->json([
             'success' => true,
             'data'    => Wisatawan::all()
         ], 200);
     }
-
-    // 2. TAMBAH USER BARU
     public function store(Request $request) {
         $request->validate([
             'nama'     => 'required',
@@ -37,7 +34,6 @@ class WisatawanApiController extends Controller
         return response()->json(['success' => true, 'message' => 'User Berhasil Ditambah', 'data' => $user], 201);
     }
 
-    // 3. EDIT DATA USER
     public function update(Request $request, $id) {
         $user = Wisatawan::where('id_wisatawan', $id)->first();
         if (!$user) return response()->json(['message' => 'User tidak ditemukan'], 404);
@@ -51,8 +47,6 @@ class WisatawanApiController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Data berhasil diupdate!', 'data' => $user], 200);
     }
-
-    // 4. KHUSUS UPDATE STATUS
     public function updateStatus(Request $request, $id) {
         $user = Wisatawan::where('id_wisatawan', $id)->first();
         if (!$user) return response()->json(['message' => 'User tidak ditemukan'], 404);
@@ -66,7 +60,6 @@ class WisatawanApiController extends Controller
         ], 200);
     }
 
-    // 5. HAPUS USER
     public function destroy($id) {
         $user = Wisatawan::where('id_wisatawan', $id)->first();
         if (!$user) return response()->json(['message' => 'User tidak ditemukan'], 404);

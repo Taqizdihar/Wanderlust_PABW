@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 class ProfileApiController extends Controller {
 
-    // 1. LIHAT SEMUA USER
     public function index() {
         return response()->json([
             'success' => true,
@@ -16,7 +15,6 @@ class ProfileApiController extends Controller {
         ], 200);
     }
 
-    // 2. TAMBAH USER BARU (POST)
     public function store(Request $request) {
         $user = User::create([
             'name'     => $request->name,
@@ -32,7 +30,6 @@ class ProfileApiController extends Controller {
         ], 201);
     }
 
-    // 3. EDIT PROFILE (PUT)
     public function update(Request $request, $id) {
         $user = User::find($id);
 
@@ -56,8 +53,6 @@ class ProfileApiController extends Controller {
             'data'    => $user
         ], 200);
     }
-
-    // 4. HAPUS PROFILE (DELETE)
     public function destroy($id) {
         $user = User::find($id);
         
